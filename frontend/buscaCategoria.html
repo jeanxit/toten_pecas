@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolher Categoria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #1E3161;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 40px;
+      margin-top: 300px; /* Ajustei a margem superior para mover mais para baixo */
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      width: 100%;
+      max-width: 700px;
+      margin-top: 0px; /* Ajustei a margem superior para mover as categorias para baixo */
+    }
+
+    .category-card {
+      background-color: #ffffff10;
+      border: 2px solid #fff;
+      border-radius: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      padding: 10px 15px; /* Diminuí o padding dos lados */
+    }
+
+    .category-card img {
+      width: 100%;
+      max-width: 240px; /* Aumentei o tamanho da imagem para ocupar mais espaço */
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .category-card span {
+      display: block;
+      font-size: 22px;
+      font-weight: 600;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .category-card:hover {
+      background-color: #ffffff20;
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .category-card {
+        font-size: 20px;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Escolha uma Categoria</h1>
+  <div class="grid-container">
+    <div class="category-card" onclick="alert('Categoria: Anfíbia')">
+      <img src="https://via.placeholder.com/300x200" alt="Anfíbia">
+      <span>🚜 Anfíbia</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Bitrem')">
+      <img src="https://via.placeholder.com/300x200" alt="Bitrem">
+      <span>🚛 Bitrem</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Comboio')">
+      <img src="https://i.ibb.co/B8qspsQ/imagem-2025-04-30-194231760.png" alt="Comboio">
+      <span>🚂 Comboio</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Escavadeira')">
+      <img src="https://via.placeholder.com/300x200" alt="Escavadeira">
+      <span>⛏️ Escavadeira</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Guindaste')">
+      <img src="https://i.ibb.co/spK4NnHc/image.png" alt="Guindaste">
+      <span>🛠️ Guindaste</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Pipa')">
+      <img src="https://via.placeholder.com/300x200" alt="Pipa">
+      <span>🎈 Pipa</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Rodotrem')">
+      <img src="https://via.placeholder.com/300x200" alt="Rodotrem">
+      <span>🚚 Rodotrem</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Peças AIZ')">
+      <img src="https://via.placeholder.com/300x200" alt="Peças AIZ">
+      <span>⚙️ Peças AIZ</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Peças Diversas')">
+      <img src="https://via.placeholder.com/300x200" alt="Peças Diversas">
+      <span>🔧 Peças Diversas</span>
+    </div>
+    <div class="category-card" onclick="alert('Categoria: Outros')">
+      <img src="https://via.placeholder.com/300x200" alt="Outros">
+      <span>🔍 Outros</span>
+    </div>
+  </div>
+</body>
+</html>
