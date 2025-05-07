@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grupo AIZ | Loja de Peças para Caminhões</title>
+  <style>
+    :root {
+      --azul-escuro: #1E3161;
+      --azul-claro: #369ED8;
+      --verde-claro: #4CAF50;
+      --verde-escuro: #388E3C;
+      --cinza-fundo: #f5f7fa;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cinza-fundo);
+      color: var(--azul-escuro);
+      font-size: 18px;
+    }
+
+    header {
+      background: var(--azul-escuro);
+      color: white;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    .carrinho {
+      font-size: 32px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      color: white;
+      text-decoration: none;
+    }
+
+    .carrinho:hover {
+      color: var(--azul-claro);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    .bem-vindo h2 {
+      font-size: 26px;
+    }
+
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .produto {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .produto:hover {
+      transform: translateY(-4px);
+    }
+
+    .produto img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background-color: #fff;
+    }
+
+    .produto h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .produto p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .produto p strong {
+      font-size: 22px;
+      color: var(--verde-claro);
+      font-weight: bold;
+    }
+
+    .botao {
+      background-color: var(--verde-claro);
+      border: none;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s ease;
+      font-size: 16px;
+    }
+
+    .botao:hover {
+      background-color: var(--verde-escuro);
+      transform: translateY(-3px);
+    }
+
+    .botao:active {
+      transform: translateY(2px);
+    }
+
+    @media (max-width: 500px) {
+      header h1 {
+        font-size: 22px;
+      }
+
+      .produto h3 {
+        font-size: 18px;
+      }
+
+      .produto p {
+        font-size: 12px;
+      }
+    }
+    .preco-produto {
+        margin-top: auto;
+        font-size: 14px;
+      }
+      
+      .preco-produto strong {
+        font-size: 22px;
+        color: var(--verde-claro);
+        font-weight: bold;
+      }
+      
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(30, 49, 97, 0.85);
+    }
+
+    .modal-conteudo {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      position: relative;
+      text-align: center;
+    }
+
+    .modal-conteudo img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .fechar {
+      color: #aaa;
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      font-size: 28px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .fechar:hover {
+      color: black;
+    }
+
+    #modalPreco {
+      font-size: 24px;
+      color: var(--verde-claro);
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="/">
+        <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+      </a>
+    </div>
+    <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">🛒 Ver Carrinho</a>
+  </header>
+
+  <main class="container">
+    <section class="bem-vindo">
+      <h2>Olá, {{ nome }} 👋</h2>
+      <p>Confira os itens disponíveis e monte seu pedido:</p>
+    </section>
+
+    <section class="produtos-grid">
+      {% for p in produtos %}
+        <div class="produto" onclick="abrirModal('{{ p[1] if p[1] else 'Produto sem nome' }}', 'R$ {{ '{:,.2f}'.format(p[2] if p[2] != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}', '{{ p[3] if p[3] else 'Descrição não disponível' }}', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg', '{{ url_for('adicionar_carrinho', CodigoProduto=p[0]) }}')">
+          <!-- Exibe a imagem fixa acima do nome -->
+          <img src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="Imagem do Produto" />
+          <h3>🔩 {{ p[1] if p[1] else 'Produto sem nome' }}</h3>  <!-- p[1] é a Descrição -->
+          <div class="preco-produto">
+            <p>Preço: 
+              <strong>
+                R$ {{ "{:,.2f}".format(p[2] if p[2] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
+              </strong>
+            </p>
+          </div>          
+        </div>
+      {% endfor %}
+    </section>
+  </main>
+
+  <!-- Modal de Produto -->
+  <div id="modalProduto" class="modal">
+    <div class="modal-conteudo">
+      <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
+      <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+      <h3 id="modalTitulo"></h3>
+      <p id="modalDescricao"></p>
+      <p><strong id="modalPreco"></strong></p>
+      <form id="modalForm" method="get">
+        <button type="submit" class="botao">Adicionar ao Carrinho</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      window.abrirModal = function(titulo, preco, descricao, imagem, link) {
+        document.getElementById('modalTitulo').textContent = titulo;
+        document.getElementById('modalPreco').textContent = preco;
+        document.getElementById('modalDescricao').textContent = descricao;
+        document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';  // imagem fixa
+        document.getElementById('modalForm').action = link;
+        document.getElementById('modalProduto').style.display = 'block';
+      }
+
+      window.fecharModal = function() {
+        document.getElementById('modalProduto').style.display = 'none';
+      }
+
+      window.onclick = function(event) {
+        const modal = document.getElementById('modalProduto');
+        if (event.target === modal) {
+          fecharModal();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
