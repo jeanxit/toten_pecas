@@ -4,73 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Página de Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Ícones -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Montserrat', sans-serif;
     }
 
     body {
       background: linear-gradient(135deg, rgba(219, 219, 219, 0.7), rgba(128, 184, 245, 0.7)), url('https://www.revistacaminhoneiro.com.br/uploads/img/noticias/6347/thumb-1000-0/9b1cccdb0383767bfaeae69a91a7e6f0.jpg') no-repeat center center/cover;
-      background-size: cover;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
-      position: relative;
+      overflow: hidden; /* evita rolagem */
     }
 
     .container {
       display: flex;
+      flex-direction: row;
       width: 100%;
-      max-width: 900px;
+      max-width: 600px;
       background: #fff;
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
       overflow: hidden;
+      min-height: 700px; /* altura mínima mais realista */
+      height: auto;
+      margin-bottom: 50px;
     }
-
+    
+    .left-side,
+    .right-side {
+      flex: 1;
+      padding: 30px;
+    }
+    
     .left-side {
       background: linear-gradient(135deg, #13496E, #369ED8);
       color: #fff;
-      flex: 1;
-      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
     }
-
+    
     .left-side h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
+      font-size: 28px;
     }
-
-    .left-side h3 {
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 20px;
-    }
-
+    
     .left-side p {
       font-size: 14px;
-      line-height: 1.6;
-      opacity: 0.9;
+      line-height: 1.4;
     }
-
-    .right-side {
-      flex: 1;
-      padding: 40px;
-      background: #ffffff;
-      border-radius: 0 20px 20px 0;
-    }
-
-    .right-side h2 {
-      font-size: 28px;
-      margin-bottom: 10px;
-      color: #13496E;
-    }
+    
 
     .form-group {
       margin-bottom: 20px;
@@ -79,14 +70,12 @@
 
     input[type="text"],
     input[type="password"],
-    input[type="email"] 
-    
-    {
+    input[type="email"] {
       width: 100%;
       padding: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      padding-left: 40px; 
+      padding-left: 40px;
     }
 
     .show-password {
@@ -147,7 +136,6 @@
       color: #aaa;
     }
 
-
     .modal {
       display: none;
       position: fixed;
@@ -202,19 +190,92 @@
       display: block;
       margin: 0 auto 20px;
     }
+
+    @media (max-width: 1024px) {
+      .container {
+        flex-direction: column;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+    
+      .left-side {
+        border-radius: 20px 20px 0 0;
+        padding: 30px 20px;
+        text-align: center;
+      }
+    
+      .left-side img {
+        margin: 0 auto 30px;
+      }
+    
+      .right-side {
+        border-radius: 0 0 20px 20px;
+        padding: 30px 20px;
+      }
+    
+      .left-side h1 {
+        font-size: 30px;
+      }
+    
+      .left-side p {
+        font-size: 14px;
+      }
+    
+      .right-side h2 {
+        font-size: 24px;
+        text-align: center;
+      }
+    
+      .form-group input {
+        font-size: 16px;
+      }
+    
+      .btn {
+        font-size: 16px;
+        padding: 14px;
+      }
+    
+      .signup {
+        text-align: center;
+      }
+    
+      .checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* isso separa bem os elementos */
+        width: 100%;
+        gap: 10px;
+      }
+      
+      .checkbox label {
+        margin: 0;
+        font-size: 14px;
+      }
+      
+      .checkbox a {
+        font-size: 12px;
+        color: #369ED8;
+        text-decoration: none;
+      }
+      
+    
+      .checkbox a {
+        align-self: flex-end;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Dentro da div .left-side -->
     <div class="left-side">
-      <img src="https://www.grupoaiz.com.br/img/logo-grupoaiz-branco.svg" alt="GRUPOAIZ" style="width: 150px; display: block; margin: 0 auto 50px;">
+      <img src="https://www.grupoaiz.com.br/img/logo-grupoaiz-branco.svg" alt="GRUPOAIZ" style="width: 200px; display: block; margin: 0 auto 50px;">
       <h1>BEM-VINDO(A)!</h1>
       <p>Para garantir a proteção dos dados empresariais, por favor, autentique-se com suas credenciais.</p>
     </div>
 
     <div class="right-side">
       <h2>Entrar</h2>
+      <br>
       <div class="form-group">
         <i class="fas fa-user icon"></i>
         <input type="text" placeholder="E-mail ou Nome de Usuário">
@@ -276,7 +337,6 @@
   </div>
 
   <script>
-    // Modal de Cadastro - Abrir e Fechar
     const signupModal = document.getElementById('signupModal');
     const closeSignupModal = document.getElementById('closeSignupModal');
     const openSignupModal = document.getElementById('openSignupModal');
@@ -289,7 +349,6 @@
       signupModal.style.display = "none";
     }
 
-    // Modal de Recuperação de Senha - Abrir e Fechar
     const forgotPasswordModal = document.getElementById('forgotPasswordModal');
     const closeForgotPasswordModal = document.getElementById('closeForgotPasswordModal');
     const forgotPasswordLink = document.getElementById('forgotPassword');
@@ -311,7 +370,6 @@
       }
     }
 
-    // Fechar modal ao pressionar a tecla ESC
     window.addEventListener('keydown', function(event) {
       if (event.key === "Escape") {
         if (forgotPasswordModal.style.display === "flex") {

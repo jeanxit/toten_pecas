@@ -1,176 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Totem Autoatendimento</title>
-
-  <!-- Fonte Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body, html {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background-color: #000;
-      overflow: hidden;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .slideshow {
-      flex: 1;
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
-
-    .slide.active {
-      opacity: 1;
-      z-index: 1;
-    }
-
-    .nav-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      border: none;
-      color: white;
-      font-size: 36px;
-      padding: 10px 20px;
-      cursor: pointer;
-      z-index: 2;
-      user-select: none;
-    }
-
-    .nav-arrow.left {
-      left: 10px;
-    }
-
-    .nav-arrow.right {
-      right: 10px;
-    }
-
-    .login-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      background-color: #1E3161;
-      color: white;
-      font-size: 28px;
-      font-weight: 600;
-      border: none;
-      padding: 30px;
-      width: 100%;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .login-button img {
-      height: 40px;
-    }
-
-    .login-button:hover {
-      background-color: #16244a;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Totem Autoatendimento</title>
+<!-- Fonte Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body, html {
+height: 100%;
+font-family: 'Poppins', sans-serif;
+background-color: #000;
+overflow: hidden;
+}
+.container {
+display: flex;
+flex-direction: column;
+height: 100%;
+}
+.slideshow {
+flex: 1;
+position: relative;
+width: 100%;
+height: 100%;
+overflow: hidden;
+}
+.slide {
+position: absolute;
+width: 100%;
+height: 100%;
+object-fit: cover;
+opacity: 0;
+transition: opacity 0.5s ease-in-out;
+}
+.slide.active {
+opacity: 1;
+z-index: 1;
+}
+.nav-arrow {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+background-color: rgba(0, 0, 0, 0.5);
+border: none;
+color: white;
+font-size: 36px;
+padding: 10px 20px;
+cursor: pointer;
+z-index: 2;
+user-select: none;
+}
+.nav-arrow.left {
+left: 10px;
+}
+.nav-arrow.right {
+right: 10px;
+}
+.login-button {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 20px;
+background-color: #1E3161;
+color: white;
+font-size: 28px;
+font-weight: 600;
+border: none;
+padding: 30px;
+width: 100%;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+.login-button img {
+height: 40px;
+}
+.login-button:hover {
+background-color: #16244a;
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="slideshow" id="slideshow">
-      <img class="slide active" src="https://www.aizparts.com.br/library_img/banner-comboios-480x200px.jpg" alt="Slide 1">
-      <img class="slide" src="https://i.ibb.co/N2QBKWYd/imagem-2025-04-30-170836542.png" alt="Slide 2">
-
-      <button class="nav-arrow left" onclick="changeSlide(-1)">&#8592;</button>
-      <button class="nav-arrow right" onclick="changeSlide(1)">&#8594;</button>
-    </div>
-
-    <button class="login-button" onclick="fazerLogin()">
-      <img src="https://i.ibb.co/fY4XbHKb/imagem-2025-04-30-164651517-removebg-preview.png" alt="Logo AIZ Parts" />
-      Clique aqui para Começar
-    </button>
-  </div>
-
-  <script>
-    let slideIndex = 0;
-    const slides = document.querySelectorAll(".slide");
-    const totalSlides = slides.length;
-    let startX = 0;
-
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.remove("active");
-        if (i === index) {
-          slide.classList.add("active");
-        }
-      });
-    }
-
-    function changeSlide(direction) {
-      slideIndex = (slideIndex + direction + totalSlides) % totalSlides;
-      showSlide(slideIndex);
-    }
-
-    // Auto slide
-    setInterval(() => {
-      changeSlide(1);
-    }, 5000);
-
-    // Touch/drag events
-    const slideshow = document.getElementById("slideshow");
-
-    slideshow.addEventListener("touchstart", (e) => {
-      startX = e.touches[0].clientX;
-    });
-
-    slideshow.addEventListener("touchend", (e) => {
-      const endX = e.changedTouches[0].clientX;
-      if (startX - endX > 50) {
-        changeSlide(1);
-      } else if (endX - startX > 50) {
-        changeSlide(-1);
-      }
-    });
-
-    // Mouse drag support
-    slideshow.addEventListener("mousedown", (e) => {
-      startX = e.clientX;
-    });
-
-    slideshow.addEventListener("mouseup", (e) => {
-      const endX = e.clientX;
-      if (startX - endX > 50) {
-        changeSlide(1);
-      } else if (endX - startX > 50) {
-        changeSlide(-1);
-      }
-    });
-
-    function fazerLogin() {
-      window.location.href = "login.html";
-    }
-  </script>
+<div class="container">
+<div class="slideshow" id="slideshow">
+<img class="slide active" src="https://i.ibb.co/84jPbv8P/1746642940122.jpg" alt="Slide 1">
+<img class="slide" src="https://i.ibb.co/Rk3F0z4j/1746642993808.jpg" alt="Slide 2">
+<button class="nav-arrow left" onclick="changeSlide(-1)">&#8592;</button>
+<button class="nav-arrow right" onclick="changeSlide(1)">&#8594;</button>
+</div>
+<button class="login-button" onclick="fazerLogin()">
+<img src="https://i.ibb.co/fY4XbHKb/imagem-2025-04-30-164651517-removebg-preview.png" alt="Logo AIZ Parts" />
+Clique aqui para Começar
+</button>
+</div>
+<script>
+let slideIndex = 0;
+const slides = document.querySelectorAll(".slide");
+const totalSlides = slides.length;
+let startX = 0;
+function showSlide(index) {
+slides.forEach((slide, i) => {
+slide.classList.remove("active");
+if (i === index) {
+slide.classList.add("active");
+}
+});
+}
+function changeSlide(direction) {
+slideIndex = (slideIndex + direction + totalSlides) % totalSlides;
+showSlide(slideIndex);
+}
+// Auto slide
+setInterval(() => {
+changeSlide(1);
+}, 5000);
+// Touch/drag events
+const slideshow = document.getElementById("slideshow");
+slideshow.addEventListener("touchstart", (e) => {
+startX = e.touches[0].clientX;
+});
+slideshow.addEventListener("touchend", (e) => {
+const endX = e.changedTouches[0].clientX;
+if (startX - endX > 50) {
+changeSlide(1);
+} else if (endX - startX > 50) {
+changeSlide(-1);
+}
+});
+// Mouse drag support
+slideshow.addEventListener("mousedown", (e) => {
+startX = e.clientX;
+});
+slideshow.addEventListener("mouseup", (e) => {
+const endX = e.clientX;
+if (startX - endX > 50) {
+changeSlide(1);
+} else if (endX - startX > 50) {
+changeSlide(-1);
+}
+});
+function fazerLogin() {
+window.location.href = "login.html";
+}
+</script>
 </body>
 </html>
