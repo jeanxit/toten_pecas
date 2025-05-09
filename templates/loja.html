@@ -211,68 +211,87 @@
 </head>
 <body>
   <header>
-  <div class="logo">
-  <a href="/">
-  <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
-  </a>
-  </div>
-  <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">🛒 Ver Carrinho</a>
+    <div class="logo">
+      <a href="/">
+        <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+      </a>
+    </div>
+    <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">🛒 Ver Carrinho</a>
   </header>
   <main class="container">
-  <section class="bem-vindo">
-  <h2>Olá, {{ nome }} 👋</h2>
-  <p>Confira os itens disponíveis e monte seu pedido:</p>
-  </section>
-  <section class="produtos-grid">
-  {% for p in produtos %}
-  <div class="produto" onclick="abrirModal('{{ p[1] if p[1] else 'Produto sem nome' }}', 'R$ {{ '{:,.2f}'.format(p[2] if p[2] != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}', '{{ p[3] if p[3] else 'Descrição não disponível' }}', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg', '{{ url_for('adicionar_carrinho', CodigoProduto=p[0]) }}')">
-  <!-- Exibe a imagem fixa acima do nome -->
-  <img src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="Imagem do Produto" />
-  <h3>🔩 {{ p[1] if p[1] else 'Produto sem nome' }}</h3> <!-- p[1] é a Descrição -->
-  <div class="preco-produto">
-  <p>Preço:
-  <strong>
-  R$ {{ "{:,.2f}".format(p[2] if p[2] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
-  </strong>
-  </p>
-  </div>
-  </div>
-  {% endfor %}
-  </section>
+    <section class="bem-vindo">
+      <h2>Olá, {{ nome }} 👋</h2>
+      <p>Confira os itens disponíveis e monte seu pedido:</p>
+    </section>
+
+    <section class="produtos-grid">
+      {% if produtos %}
+        {% for p in produtos %}
+        <div class="produto">
+          <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
+          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <div class="preco-produto">
+            <p>Preço:
+              <strong>
+                R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
+              </strong>
+            </p>
+          </div>
+          <button class="botao" style="margin-top: 10px;"
+            onclick="abrirModal('{{ p['Descricao'] }}', 
+                                'R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}',
+                                '{{ p['Descricao'] }}', 
+                                '{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}', 
+                                '{{ p['CodigoProduto'] }}')">
+            Ver Detalhes
+          </button>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>Não há produtos disponíveis.</p>
+      {% endif %}
+    </section>
   </main>
+
   <!-- Modal de Produto -->
   <div id="modalProduto" class="modal">
-  <div class="modal-conteudo">
-  <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
-  <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
-  <h3 id="modalTitulo"></h3>
-  <p id="modalDescricao"></p>
-  <p><strong id="modalPreco"></strong></p>
-  <form id="modalForm" method="get">
-  <button type="submit" class="botao">Adicionar ao Carrinho</button>
-  </form>
+    <div class="modal-conteudo">
+      <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
+      <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+      <h3 id="modalTitulo"></h3>
+      <p id="modalDescricao"></p>
+      <p><strong id="modalPreco"></strong></p>
+      <form id="modalForm" method="POST" action="/adicionar">
+        <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
+        <button type="submit" class="botao">Adicionar ao Carrinho</button>
+      </form>
+    </div>
   </div>
-  </div>
+
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  window.abrirModal = function(titulo, preco, descricao, imagem, link) {
-  document.getElementById('modalTitulo').textContent = titulo;
-  document.getElementById('modalPreco').textContent = preco;
-  document.getElementById('modalDescricao').textContent = descricao;
-  document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'; // imagem fixa
-  document.getElementById('modalForm').action = link;
-  document.getElementById('modalProduto').style.display = 'block';
-  }
-  window.fecharModal = function() {
-  document.getElementById('modalProduto').style.display = 'none';
-  }
-  window.onclick = function(event) {
-  const modal = document.getElementById('modalProduto');
-  if (event.target === modal) {
-  fecharModal();
-  }
-  }
-  });
+    document.addEventListener("DOMContentLoaded", () => {
+      window.abrirModal = function(titulo, preco, descricao, imagem, codigoProduto) {
+        const modal = document.getElementById('modalProduto');
+        document.getElementById('modalTitulo').textContent = titulo;
+        document.getElementById('modalPreco').textContent = preco;
+        document.getElementById('modalDescricao').textContent = descricao;
+        document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';
+        document.getElementById('modalCodigoProduto').value = codigoProduto;  // Define o código do produto no campo oculto
+        modal.style.display = 'block';
+      };
+
+      window.fecharModal = function() {
+        const modal = document.getElementById('modalProduto');
+        if (modal) modal.style.display = 'none';
+      };
+
+      window.onclick = function(event) {
+        const modal = document.getElementById('modalProduto');
+        if (event.target === modal) {
+          fecharModal();
+        }
+      };
+    });
   </script>
-  </body> 
+</body> 
 </html>

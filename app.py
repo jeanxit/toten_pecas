@@ -8,12 +8,16 @@ from email.message import EmailMessage
 from datetime import datetime, timedelta
 import secrets
 import os
+import re
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 conn = mysql.connector.connect(**mysql_config)
 cursor = conn.cursor()
+
+# Variável global para armazenar os produtos disponíveis
+produtos_disponiveis = {}
 
 # ==================== ROTAS DE AUTENTICAÇÃO ====================
 
@@ -97,7 +101,7 @@ app.jinja_env.filters['currency'] = format_currency
 def loja():
     nome = session.get('nome') or request.cookies.get('nome')
     if not nome:
-        return redirect(url_for('login'))
+        return redirect(url_for('login'))  # Redireciona se não estiver logado
 
     url = "https://www.zohoapis.com/creator/custom/grupoaiz/Pe_asAPI?publickey=ySdkEmJZO9qMu8pgrMm6FkxYY"
     try:
@@ -114,58 +118,74 @@ def loja():
             except ValueError:
                 preco_float = 0.0
 
-            imagem = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
-            if "<img src=" in imagem:
-                imagem_url = re.search(r'<img src="([^"]+)"', imagem)
-                if imagem_url:
-                    imagem = imagem_url.group(1)
+            imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')  # fallback padrão
+            if imagem_raw:
+                urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
+                if urls:
+                    imagem_url = urls[0]  # Usa a primeira URL encontrada
+                else:
+                    imagem_url = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
+            else:
+                imagem_url = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
 
-            produtos_formatados.append({
+            produto_formatado = {
                 'CodigoProduto': produto.get('CodigoProduto'),
                 'Descricao': produto.get('Descricao'),
                 'PrecoVenda': preco_float,
-                'Imagem': imagem
-            })
+                'Imagem': imagem_url
+            }
+
+            produtos_formatados.append(produto_formatado)
+
+        # Armazena os produtos na variável global
+        global produtos_disponiveis
+        produtos_disponiveis = {produto['CodigoProduto']: produto for produto in produtos_formatados}
 
         return render_template('loja.html', nome=nome, produtos=produtos_formatados)
 
     except Exception as e:
         flash(f"Erro ao buscar produtos da API: {e}", "danger")
         return render_template('loja.html', nome=nome, produtos=[])
-
+    
 # ==================== CARRINHO ====================
-@app.route('/adicionar/<string:CodigoProduto>', methods=['GET'])
-def adicionar_carrinho(CodigoProduto):
+@app.route('/adicionar', methods=['POST'])
+def adicionar_carrinho():
     nome = session.get('nome')
     if not nome:
-        return redirect(url_for('index'))
+        return redirect(url_for('index'))  # Se não estiver logado, redireciona para a página inicial
 
-    # Consulta o produto pelo CodigoProduto
-    cursor.execute("SELECT CodigoProduto, Descricao, PrecoVenda FROM produtos WHERE CodigoProduto = %s", (CodigoProduto,))
-    produto = cursor.fetchone()
+    carrinho_nome = f'carrinho_{nome}'
+
+    CodigoProduto = request.form.get('CodigoProduto')
+
+    # Lógica para buscar o produto na variável global
+    produto = produtos_disponiveis.get(CodigoProduto)
 
     if not produto:
         flash(f"Produto com código {CodigoProduto} não encontrado!", "danger")
         return redirect(url_for('loja'))
 
-    carrinho_nome = f'carrinho_{nome}'
+    # Inicializa o carrinho, se necessário
     if carrinho_nome not in session:
         session[carrinho_nome] = []
 
-    try:
-        preco = float(str(produto[2]).replace(',', '.'))
-        preco = max(0, round(preco, 2))
-    except (ValueError, TypeError):
-        preco = 0.0
+    # Verifica se o produto já está no carrinho
+    produto_existente = next((item for item in session[carrinho_nome] if item['CodigoProduto'] == CodigoProduto), None)
 
-    session[carrinho_nome].append({
-        'nome': produto[1],
-        'preco': preco,
-        'CodigoProduto': produto[0]  # Usando o código do produto
-    })
-    session.modified = True
+    if produto_existente:
+        produto_existente['quantidade'] += 1  # Incrementa a quantidade do produto no carrinho
+        flash(f"Quantidade do produto {produto['Descricao']} aumentada!", "success")
+    else:
+        preco = max(0, round(produto['PrecoVenda'], 2))
+        session[carrinho_nome].append({
+            'nome': produto['Descricao'],
+            'preco': preco,
+            'CodigoProduto': CodigoProduto,
+            'quantidade': 1
+        })
+        flash(f"Produto {produto['Descricao']} adicionado ao carrinho", "success")
 
-    flash(f"Produto {produto[1]} adicionado ao carrinho", "success")
+    session.modified = True  # Garante que a sessão será salva corretamente
     return redirect(url_for('carrinho'))
 
 
@@ -178,6 +198,18 @@ def carrinho():
     carrinho_produtos = session.get(f'carrinho_{nome}', [])
     if not carrinho_produtos:
         flash("Seu carrinho está vazio!", "warning")
+
+    # Processar a imagem para cada produto no carrinho
+    for produto in carrinho_produtos:
+        imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')  # fallback padrão
+        if imagem_raw:
+            urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
+            if urls:
+                produto['Imagem'] = urls[0]  # Usa a primeira URL encontrada
+            else:
+                produto['Imagem'] = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
+        else:
+            produto['Imagem'] = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
 
     return render_template('carrinho.html', produtos=carrinho_produtos)
 
