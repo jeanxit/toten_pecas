@@ -99,49 +99,39 @@ def loja():
     if not nome:
         return redirect(url_for('login'))
 
-    ultima_atualizacao = session.get('ultima_atualizacao')
-    if isinstance(ultima_atualizacao, str):
-        try:
-            ultima_atualizacao = datetime.fromisoformat(ultima_atualizacao)
-        except ValueError:
-            ultima_atualizacao = None
+    url = "https://www.zohoapis.com/creator/custom/grupoaiz/Pe_asAPI?publickey=ySdkEmJZO9qMu8pgrMm6FkxYY"
+    try:
+        response = requests.get(url)
+        data = response.json()
+        produtos_api = data.get('result', {}).get('Produtos', [])
 
-    if ultima_atualizacao:
-        ultima_atualizacao = ultima_atualizacao.replace(tzinfo=None)
+        produtos_formatados = []
+        for produto in produtos_api:
+            preco = produto.get('PrecoVenda', '0')
+            preco = preco if preco != '-' and preco else '0'
+            try:
+                preco_float = float(str(preco).replace(',', '.'))
+            except ValueError:
+                preco_float = 0.0
 
-    if not ultima_atualizacao or datetime.now() - ultima_atualizacao > timedelta(minutes=5):
-        url = "https://www.zohoapis.com/creator/custom/grupoaiz/Pe_asAPI?publickey=ySdkEmJZO9qMu8pgrMm6FkxYY"
-        try:
-            response = requests.get(url)
-            data = response.json()
-            produtos_api = data.get('result', {}).get('Produtos', [])
+            imagem = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
+            if "<img src=" in imagem:
+                imagem_url = re.search(r'<img src="([^"]+)"', imagem)
+                if imagem_url:
+                    imagem = imagem_url.group(1)
 
-            if produtos_api:
-                cursor.execute("START TRANSACTION")
-                for produto in produtos_api:
-                    preco = produto.get('PrecoVenda', '0')
-                    preco = preco if preco != '-' and preco else '0'
+            produtos_formatados.append({
+                'CodigoProduto': produto.get('CodigoProduto'),
+                'Descricao': produto.get('Descricao'),
+                'PrecoVenda': preco_float,
+                'Imagem': imagem
+            })
 
-                    codigo_produto = produto.get('CodigoProduto')
-                    descricao = produto.get('Descricao')
+        return render_template('loja.html', nome=nome, produtos=produtos_formatados)
 
-                    cursor.execute("SELECT * FROM produtos WHERE CodigoProduto = %s", (codigo_produto,))
-                    if cursor.fetchone():
-                        cursor.execute("""UPDATE produtos SET Descricao = %s, PrecoVenda = %s WHERE CodigoProduto = %s""", (descricao, preco, codigo_produto))
-                    else:
-                        cursor.execute("""INSERT INTO produtos (CodigoProduto, Descricao, PrecoVenda) VALUES (%s, %s, %s)""", (codigo_produto, descricao, preco))
-
-                conn.commit()
-                session['ultima_atualizacao'] = datetime.now().isoformat()
-                flash('Dados da API atualizados com sucesso!', 'success')
-            else:
-                flash('Nenhum dado encontrado na API.', 'warning')
-        except Exception as e:
-            flash(f"Erro ao buscar peças: {e}", "danger")
-
-    cursor.execute("SELECT CodigoProduto, Descricao, PrecoVenda FROM produtos")
-    produtos_db = cursor.fetchall()
-    return render_template('loja.html', nome=nome, produtos=produtos_db)
+    except Exception as e:
+        flash(f"Erro ao buscar produtos da API: {e}", "danger")
+        return render_template('loja.html', nome=nome, produtos=[])
 
 # ==================== CARRINHO ====================
 @app.route('/adicionar/<string:CodigoProduto>', methods=['GET'])

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grupo AIZ | Loja de Peças para Caminhões</title>
+  <style>
+    :root {
+      --azul-escuro: #1E3161;
+      --azul-claro: #369ED8;
+      --verde-claro: #4CAF50;
+      --verde-escuro: #388E3C;
+      --cinza-fundo: #f5f7fa;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cinza-fundo);
+      color: var(--azul-escuro);
+      font-size: 18px;
+    }
+
+    header {
+      background: var(--azul-escuro);
+      color: white;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    .carrinho {
+      font-size: 32px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      color: white;
+      text-decoration: none;
+    }
+
+    .carrinho:hover {
+      color: var(--azul-claro);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    .bem-vindo h2 {
+      font-size: 26px;
+    }
+
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .produto {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .produto:hover {
+      transform: translateY(-4px);
+    }
+
+    .produto img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background-color: #fff;
+    }
+
+    .produto h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .produto p {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .produto p strong {
+      font-size: 22px;
+      color: var(--verde-claro);
+      font-weight: bold;
+    }
+
+    .botao {
+      background-color: var(--verde-claro);
+      border: none;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s ease;
+      font-size: 16px;
+    }
+
+    .botao:hover {
+      background-color: var(--verde-escuro);
+      transform: translateY(-3px);
+    }
+
+    .botao:active {
+      transform: translateY(2px);
+    }
+
+    @media (max-width: 500px) {
+      header h1 {
+        font-size: 22px;
+      }
+
+      .produto h3 {
+        font-size: 18px;
+      }
+
+      .produto p {
+        font-size: 12px;
+      }
+    }
+    .preco-produto {
+        margin-top: auto;
+        font-size: 14px;
+      }
+      
+      .preco-produto strong {
+        font-size: 22px;
+        color: var(--verde-claro);
+        font-weight: bold;
+      }
+      
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(30, 49, 97, 0.85);
+    }
+
+    .modal-conteudo {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      position: relative;
+      text-align: center;
+    }
+
+    .modal-conteudo img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .fechar {
+      color: #aaa;
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      font-size: 28px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .fechar:hover {
+      color: black;
+    }
+
+    #modalPreco {
+      font-size: 24px;
+      color: var(--verde-claro);
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="/">
+        <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+      </a>
+    </div>
+    <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">🛒 Ver Carrinho</a>
+  </header>
+
+  <main class="container">
+    <section class="bem-vindo">
+      <h2>Olá, {{ nome }} 👋</h2>
+      <p>Confira os itens disponíveis e monte seu pedido:</p>
+    </section>
+
+    <section class="produtos-grid">
+  <div class="produto" onclick="document.getElementById('modalProduto1').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/681279b9c7b6c.png" alt="Imagem do Produto" />
+    <h3>🔩 RADIADOR OAC 400 02 24V MOD 492717 (FORN KTR)</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 99,90</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto2').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679928a38d99b.jpg" alt="Imagem do Produto" />
+    <h3>🔩 SUSPENSOR PNEUMATICO REBAIXADO2</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 149,50</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto3').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679a2a83a9445.jpg" alt="Imagem do Produto" />
+    <h3>🔩 LAVADORA ALTA PRESSAO</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 75,00</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto4').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679a2d052fc23.jpg" alt="Imagem do Produto" />
+    <h3>🔩 VALVULA DE CONTRABALANCO DUPLA</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 120,00</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto5').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/6798dde34a310.jpg" alt="Imagem do Produto" />
+    <h3>🔩 COMANDO HIDRAULICO AUXILIAR</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 89,90</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto6').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679a2cbc9c857.jpg" alt="Imagem do Produto" />
+    <h3>🔩 PARALAMA FC1 SINGLE COMPLETO PLASTICO VAC PRETO COM LOGO</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 200,00</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto7').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679a2ba39953f.jpg" alt="Imagem do Produto" />
+    <h3>🔩 FILTRO HIDRAULICO MUNCK</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 59,90</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto8').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679a2d052fc23.jpg" alt="Imagem do Produto" />
+    <h3>🔩 VALVULA</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 135,75</strong></p>
+    </div>
+  </div>
+
+  <div class="produto" onclick="document.getElementById('modalProduto10').style.display='block'">
+    <img src="https://www.aizparts.com.br/uploads/679a2d5d918da.jpg" alt="Imagem do Produto" />
+    <h3>🔩 VALVULA DE ACIONAMENTO JOYSTICK TER-C09562</h3>
+    <div class="preco-produto">
+      <p>Preço: <strong>R$ 99,99</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Modais de Produto -->
+<!-- Modais de Produto Corrigidos -->
+<div id="modalProduto1" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/681279b9c7b6c.png" alt="">
+    <h3>🔩 RADIADOR OAC 400 02 24V MOD 492717 (FORN KTR)</h3>
+    <p>Descrição do Produto 1</p>
+    <p><strong>R$ 99,90</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=001">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto2" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679928a38d99b.jpg" alt="">
+    <h3>🔩 SUSPENSOR PNEUMATICO REBAIXADO2</h3>
+    <p>Descrição do Produto 2</p>
+    <p><strong>R$ 149,50</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=002">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto3" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2a83a9445.jpg" alt="">
+    <h3>🔩 LAVADORA ALTA PRESSAO</h3>
+    <p>Descrição do Produto 3</p>
+    <p><strong>R$ 75,00</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=003">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto4" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2d052fc23.jpg" alt="">
+    <h3>🔩 VALVULA DE CONTRABALANCO DUPLA</h3>
+    <p>Descrição do Produto 4</p>
+    <p><strong>R$ 120,00</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=004">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto5" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/6798dde34a310.jpg" alt="">
+    <h3>🔩 COMANDO HIDRAULICO AUXILIAR</h3>
+    <p>Descrição do Produto 5</p>
+    <p><strong>R$ 89,90</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=005">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto6" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2cbc9c857.jpg" alt="">
+    <h3>🔩 PARALAMA FC1 SINGLE COMPLETO PLASTICO VAC PRETO COM LOGO</h3>
+    <p>Descrição do Produto 6</p>
+    <p><strong>R$ 200,00</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=006">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto7" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2ba39953f.jpg" alt="">
+    <h3>🔩 FILTRO HIDRAULICO MUNCK</h3>
+    <p>Descrição do Produto 7</p>
+    <p><strong>R$ 59,90</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=007">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto8" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2d052fc23.jpg" alt="">
+    <h3>🔩 VALVULA</h3>
+    <p>Descrição do Produto 8</p>
+    <p><strong>R$ 135,75</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=008">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto9" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+    <h3>🔩 PRODUTO 9</h3>
+    <p>Descrição do Produto 9</p>
+    <p><strong>R$ 88,88</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=009">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+<div id="modalProduto10" class="modal">
+  <div class="modal-conteudo">
+    <button class="fechar" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+    <img src="https://www.aizparts.com.br/uploads/679a2d5d918da.jpg" alt="">
+    <h3>🔩 VALVULA DE ACIONAMENTO JOYSTICK TER-C09562</h3>
+    <p>Descrição do Produto 10</p>
+    <p><strong>R$ 99,99</strong></p>
+    <form method="get" action="/adicionar_carrinho?CodigoProduto=010">
+      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+    </form>
+  </div>
+</div>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      window.abrirModal = function(titulo, preco, descricao, imagem, link) {
+        document.getElementById('modalTitulo').textContent = titulo;
+        document.getElementById('modalPreco').textContent = preco;
+        document.getElementById('modalDescricao').textContent = descricao;
+        document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';  // imagem fixa
+        document.getElementById('modalForm').action = link;
+        document.getElementById('modalProduto').style.display = 'block';
+      }
+
+      window.fecharModal = function() {
+        document.getElementById('modalProduto').style.display = 'none';
+      }
+
+      window.onclick = function(event) {
+        const modal = document.getElementById('modalProduto');
+        if (event.target === modal) {
+          fecharModal();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
