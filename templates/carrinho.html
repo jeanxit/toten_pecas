@@ -208,6 +208,51 @@
   </style>
 </head>
 <body>
+  <!-- TOAST DE MENSAGEM -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div id="toast-messages">
+        {% for category, message in messages %}
+          <div class="toast toast-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <script>
+    setTimeout(() => {
+      const toasts = document.querySelectorAll('.toast');
+      toasts.forEach(t => t.remove());
+    }, 3000);
+  </script>
+
+  <style>
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      z-index: 9999;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .toast-success {
+      background-color: #28a745;
+    }
+
+    .toast-danger {
+      background-color: #dc3545;
+    }
+
+    .toast-warning {
+      background-color: #ffc107;
+      color: #000;
+    }
+  </style>
+
   <h1>🛒 Carrinho de {{ session.get('nome', 'usuário') }}</h1>
 
   <div class="cart-container">
@@ -218,15 +263,16 @@
         {% set total = 0 %}
         {% for produto in produtos %}
           <div class="cart-item" id="cart-item-{{ produto.CodigoProduto }}">
-            <img src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="Foto {{ produto.codigo }}">
+            <img src="{{ produto.Imagem }}" alt="Foto {{ produto.CodigoProduto }}">
             <div class="cart-item-details">
               <p><strong>{{ produto.nome[:27] }}{% if produto.nome|length > 27 %}...{% endif %}</strong></p>
               <p>Código: {{ produto.CodigoProduto }}</p>
             </div>
             <div class="quantity-control">
               <button onclick="decreaseQuantity('{{ produto.CodigoProduto }}')">-</button>
-              <input type="number" value="1" id="quantity-{{ produto.CodigoProduto }}" min="1" data-preco="{{ produto.preco }}">
+              <input type="number" value="{{ produto.quantidade }}" id="quantity-{{ produto.CodigoProduto }}" min="1" data-preco="{{ produto.preco }}">
               <button onclick="increaseQuantity('{{ produto.CodigoProduto }}')">+</button>
+              <button onclick="removeItem('{{ produto.CodigoProduto }}')" style="color: red; font-weight: bold; margin-left: 10px;">🗑</button>
             </div>
             <div class="price" id="price-{{ produto.CodigoProduto }}">
               R$ {{ '{:,.2f}'.format(produto.preco if produto.preco != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}
@@ -243,7 +289,6 @@
           <span id="total-price">R$ {{ total|round(2) }}</span>
         </div>
         <hr/>
-        <br>
         <form action="{{ url_for('finalizar_compra') }}" method="post">
           {% for produto in produtos %}
             <input type="hidden" name="produto_nome" value="{{ produto.nome }}">
@@ -261,7 +306,6 @@
   </div>
 
   <script>
-    // Função para formatar o valor para o padrão monetário brasileiro (R$ 1.234,56)
     function formatToReal(value) {
       return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
@@ -274,16 +318,23 @@
 
     function decreaseQuantity(itemId) {
       const quantityInput = document.getElementById(`quantity-${itemId}`);
-      const cartItem = document.getElementById(`cart-item-${itemId}`);
       let currentQuantity = parseInt(quantityInput.value);
 
       if (currentQuantity > 1) {
         quantityInput.value = currentQuantity - 1;
       } else {
-        cartItem.remove();
+        removeItem(itemId);
       }
 
       updateTotal();
+    }
+
+    function removeItem(itemId) {
+      const itemElement = document.getElementById(`cart-item-${itemId}`);
+      if (itemElement) {
+        itemElement.remove();
+        updateTotal();
+      }
     }
 
     function updateTotal() {
@@ -298,30 +349,14 @@
         itemCount += quantity;
       });
 
-      // Atualizar os valores formatados no formato real (R$)
       document.getElementById('total-price').innerText = formatToReal(total);
       document.getElementById('total-items-title').innerText = itemCount;
-      document.getElementById('total-items-summary').innerText = `Total (${itemCount})`;
-      document.getElementById('total-summary-value').innerText = formatToReal(total);
+      document.getElementById('total-items-summary').innerText = `Itens (${itemCount})`;
     }
 
     window.onload = function() {
       updateTotal();
-      formatCartPrices();
     };
-
-    // Formatar os preços exibidos no carrinho
-    function formatCartPrices() {
-        const priceElements = document.querySelectorAll('.price');
-        priceElements.forEach((el) => {
-          const price = parseFloat(el.innerText.replace('R$', '').trim());
-          el.innerText = formatToReal(price);
-        });
-
-      const totalPriceElement = document.getElementById('total-price');
-      const total = parseFloat(totalPriceElement.innerText.replace('R$', '').trim());
-      totalPriceElement.innerText = formatToReal(total);
-    }
   </script>
 </body>
 </html>

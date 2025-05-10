@@ -176,12 +176,21 @@ def adicionar_carrinho():
         produto_existente['quantidade'] += 1  # Incrementa a quantidade do produto no carrinho
         flash(f"Quantidade do produto {produto['Descricao']} aumentada!", "success")
     else:
+        # Tratamento da imagem igual ao da loja
+        imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
+        if imagem_raw:
+            urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
+            imagem_url = urls[0] if urls else 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'
+        else:
+            imagem_url = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'
+
         preco = max(0, round(produto['PrecoVenda'], 2))
         session[carrinho_nome].append({
             'nome': produto['Descricao'],
             'preco': preco,
             'CodigoProduto': CodigoProduto,
-            'quantidade': 1
+            'quantidade': 1,
+            'Imagem': imagem_url  # adiciona imagem já tratada
         })
         flash(f"Produto {produto['Descricao']} adicionado ao carrinho", "success")
 
@@ -193,101 +202,84 @@ def adicionar_carrinho():
 def carrinho():
     nome = session.get('nome')
     if not nome:
-        return redirect(url_for('index'))  # Se não estiver logado, redireciona para a página inicial
+        return redirect(url_for('index'))
 
     carrinho_produtos = session.get(f'carrinho_{nome}', [])
     if not carrinho_produtos:
         flash("Seu carrinho está vazio!", "warning")
 
-    # Processar a imagem para cada produto no carrinho
     for produto in carrinho_produtos:
-        imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')  # fallback padrão
-        if imagem_raw:
-            urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
-            if urls:
-                produto['Imagem'] = urls[0]  # Usa a primeira URL encontrada
-            else:
-                produto['Imagem'] = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
-        else:
-            produto['Imagem'] = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
+        imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
+        urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
+        produto['Imagem'] = urls[0] if urls else 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'
 
     return render_template('carrinho.html', produtos=carrinho_produtos)
-
 
 @app.route('/finalizar-compra', methods=['POST'])
 def finalizar_compra():
     nome_usuario = session.get('nome')
-    usuario_id = session.get('usuario_id')  # Certifique-se de salvar isso na sessão após login
+    usuario_id = session.get('usuario_id')
 
-    # Verificar se o usuário está logado
+    # Verifica se o usuário está logado
     if not nome_usuario or not usuario_id:
         flash('Você precisa estar logado para finalizar a compra.', 'warning')
-        return redirect(url_for('index'))  # Se não estiver logado, redireciona para a página inicial
+        return redirect(url_for('index'))
 
-    # Recuperar o carrinho da sessão
+    # Recupera o carrinho do usuário
     carrinho_nome = f'carrinho_{nome_usuario}'
     carrinho = session.get(carrinho_nome, [])
 
-    # Verificar se o carrinho está vazio
+    # Verifica se o carrinho está vazio
     if not carrinho:
         flash('O carrinho está vazio!', 'warning')
-        return redirect(url_for('loja'))  # Redireciona de volta para a loja se o carrinho estiver vazio
+        return redirect(url_for('loja'))
 
     try:
-        if conn.open:
+        # Verificando a conexão com o banco de dados
+        if conn.is_connected():
             print("Conexão com o banco de dados estabelecida.")
         else:
             raise Exception("Conexão com o banco de dados falhou.")
 
-        produtos_para_inserir = []
-        historico_compras = []
+        # Obtendo o cursor da conexão
+        cursor = conn.cursor()
 
-        # Calcular o total para cada produto no carrinho e preparar dados para inserção
         for item in carrinho:
-            codigo_produto = item['CodigoProduto']  # Usando CodigoProduto agora
-            quantidade = item.get('quantidade', 1)
+            codigo = item['CodigoProduto']
+            quantidade = item.get('quantidade', 1)  # Pegando a quantidade, se não definida, será 1
             preco = item['preco']
-            total = preco * quantidade  # Calculando o total
+            total = preco * quantidade  # Aqui é onde o total está sendo calculado corretamente
 
-            # Preparar os dados para inserção no carrinho_temporal
-            produtos_para_inserir.append((usuario_id, codigo_produto, quantidade, preco))
-            # Preparar os dados para inserção no histórico de compras, incluindo o total
-            historico_compras.append((usuario_id, codigo_produto, quantidade, preco, total))  
-
-        # Inserir os dados no carrinho_temporal
-        if produtos_para_inserir:
-            cursor.executemany("""
-                INSERT INTO carrinho_temporal (usuario_id, produto_id, quantidade, preco_unitario, data_adicao)
-                SELECT %s, p.id, %s, %s, NOW()
-                FROM produtos p WHERE p.CodigoProduto = %s
-            """, produtos_para_inserir)
-            print(f"{len(produtos_para_inserir)} produtos inseridos na tabela carrinho_temporal.")
-
-        # Inserir os dados no historico_compras com o total
-        if historico_compras:
-            cursor.executemany("""
+            cursor.execute("""
                 INSERT INTO historico_compras (usuario_id, produto_id, quantidade, preco_unitario, total, data_compra, status)
-                SELECT %s, p.id, %s, %s, %s, NOW(), 'pendente'
-                FROM produtos p WHERE p.CodigoProduto = %s
-            """, historico_compras)
-            print(f"{len(historico_compras)} produtos inseridos no histórico de compras.")
+                VALUES (%s, %s, %s, %s, %s, NOW(), 'pendente')
+            """, (usuario_id, codigo, quantidade, preco, total))  # Aqui o total é passado corretamente
 
-        # Commit para garantir que os dados foram inseridos no banco
+        # Commit para garantir que as alterações sejam persistidas no banco
         conn.commit()
-        print("Dados inseridos e commit realizado com sucesso.")
 
-        # Limpar o carrinho na sessão após a finalização
-        session[carrinho_nome] = []  # Limpa o carrinho na sessão
-        session.modified = True  # Marca a sessão como modificada
+        # Limpar o carrinho da sessão após a compra
+        session[carrinho_nome] = []
+        session.modified = True
 
-        # Exibir uma mensagem de sucesso
-        flash('✅ Seu pedido foi feito com sucesso!', 'success')
-        return redirect(url_for('index'))  # Ou redireciona para uma página de confirmação de compra
+        # Armazenar flag para mostrar um toast na página index
+        session['compra_realizada'] = True
+        return redirect(url_for('index'))
 
     except Exception as e:
+        # Em caso de erro, realizar o rollback da transação
+        conn.rollback()
         print(f"Erro ao finalizar compra: {e}")
         flash(f"Erro ao finalizar compra: {e}", "danger")
         return redirect(url_for('carrinho'))
+
+    finally:
+        cursor.close()
+@app.route('/limpar-flag', methods=['POST'])
+def limpar_flag():
+    session.pop('compra_realizada', None)
+    session.modified = True
+    return '', 204
 
 
 # ==================== EMAIL ====================
