@@ -422,24 +422,24 @@
 
     </style>
   </head>
-  <body>
-    <header>
-      <div style="margin: 0 15px;">
-        <button class="menu-toggle">&#9776;</button>
-      </div>
+ <body>
+  <header>
+    <div style="margin: 0 15px;">
+      <button class="menu-toggle">&#9776;</button>
+    </div>
 
-      <div class="logo">
-        <a href="/">
-          <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
-        </a>
-      </div>
-
-      <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">
-        <img src="https://i.ibb.co/wh510dXq/grocery-store.png" alt="Carrinho de compras" style="width: 40px; height: 40px;">
+    <div class="logo">
+      <a href="/">
+        <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
       </a>
-    </header>
+    </div>
 
-    <!-- Sidebar -->
+    <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">
+      <img src="https://i.ibb.co/wh510dXq/grocery-store.png" alt="Carrinho de compras" style="width: 40px; height: 40px;">
+    </a>
+  </header>
+
+  <!-- Sidebar -->
   <nav class="sidebar">
     <button class="fechar-sidebar">&times;</button>
 
@@ -456,16 +456,17 @@
         </a>
         <div class="categorias-container">
           <ul class="subcategorias">
-            <li><a href="#">Anfíbia</a></li>
-            <li><a href="#">Bitrem</a></li>
-            <li><a href="#">Comboio</a></li>
-            <li><a href="#">Escavadeira</a></li>
-            <li><a href="#">Guindaste</a></li>
-            <li><a href="#">Peças AIZ</a></li>
-            <li><a href="#">Peças Diversas</a></li>
-            <li><a href="#">Pipa</a></li>
-            <li><a href="#">Rodotrem</a></li>
-            <li><a href="#">Outro</a></li>
+            <li><a href="#" data-categoria="Todos" class="filtrar-categoria">Todos</a></li>
+            <li><a href="#" data-categoria="Anfíbia" class="filtrar-categoria">Anfíbia</a></li>
+            <li><a href="#" data-categoria="Bitrem" class="filtrar-categoria">Bitrem</a></li>
+            <li><a href="#" data-categoria="Comboio" class="filtrar-categoria">Comboio</a></li>
+            <li><a href="#" data-categoria="Escavadeira" class="filtrar-categoria">Escavadeira</a></li>
+            <li><a href="#" data-categoria="Guindaste" class="filtrar-categoria">Guindaste</a></li>
+            <li><a href="#" data-categoria="Peças AIZ" class="filtrar-categoria">Peças AIZ</a></li>
+            <li><a href="#" data-categoria="Peças Diversas" class="filtrar-categoria">Peças Diversas</a></li>
+            <li><a href="#" data-categoria="Pipa" class="filtrar-categoria">Pipa</a></li>
+            <li><a href="#" data-categoria="Rodotrem" class="filtrar-categoria">Rodotrem</a></li>
+            <li><a href="#" data-categoria="Outro" class="filtrar-categoria">Outro</a></li>
           </ul>
         </div>
       </li>
@@ -476,102 +477,156 @@
     <button class="botao-sair">Sair da Conta</button>
   </nav>
 
+  <main class="container">
+    <section class="bem-vindo">
+      <h2>Olá, {{ nome }} 👋</h2>
+      <p>Confira os itens disponíveis e monte seu pedido:</p>
+    </section>
 
-    <main class="container">
-      <section class="bem-vindo">
-        <h2>Olá, {{ nome }} 👋</h2>
-        <p>Confira os itens disponíveis e monte seu pedido:</p>
-      </section>
-
-      <section class="produtos-grid">
-        {% if produtos %}
-          {% for p in produtos %}
-          <div class="produto">
-            <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
-            <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
-            <div class="preco-produto">
-              <p>
-                <strong>
-                  R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
-                </strong>
-              </p>
-            </div>
-            <button class="botao" style="margin-top: 10px;"
-              onclick="abrirModal('{{ p['Descricao'] }}', 
-                                  'R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}',
-                                  '{{ p['Descricao'] }}', 
-                                  '{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}', 
-                                  '{{ p['CodigoProduto'] }}')">
-              Ver Detalhes
-            </button>
+    <section class="produtos-grid">
+      {% if produtos %}
+        {% for p in produtos %}
+        <div class="produto">
+          <!-- Categoria oculta para filtragem -->
+          <div class="categoria" style="display: none;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
+          
+          <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
+          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <div class="preco-produto">
+            <p>
+              <strong>
+                R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
+              </strong>
+            </p>
           </div>
-          {% endfor %}
-        {% else %}
-          <p>Não há produtos disponíveis.</p>
-        {% endif %}
-      </section>
-    </main>
 
-    <!-- Modal de Produto -->
-    <div id="modalProduto" class="modal">
-      <div class="modal-conteudo">
-        <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
-        <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
-        <h3 id="modalTitulo"></h3>
-        <p id="modalDescricao"></p>
-        <p><strong id="modalPreco"></strong></p>
-        <form id="modalForm" method="POST" action="/adicionar">
-          <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
-          <button type="submit" class="botao">Adicionar ao Carrinho</button>
-        </form>
-      </div>
+          <!-- Exibindo comprimento do produto no card -->
+          <div class="comprimento-produto">
+            <p style="color: #fff;"> {{ p['ComprimentoCM'] | default('-') }}</p>
+          </div>
+
+          <button class="botao" style="margin-top: 10px;"
+            onclick="abrirModal(
+              '{{ p['Descricao'] | escape }}', 
+              '{{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}',
+              '{{ p['Descricao'] | escape }}', 
+              '{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}', 
+              '{{ p['CodigoProduto'] }}',
+              '{{ p['Fabricante'] | default('-') | escape }}',
+              '{{ p['Categoria'] | default('-') | escape }}',
+              '{{ p['ComprimentoCM'] | default('-') | escape }}',
+              '{{ p['PesoCM'] | default('-') | escape }}',
+              '{{ p['QuantidadeEstoque'] | default('-') | escape }}'
+            )">
+            Ver Detalhes
+          </button>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>Não há produtos disponíveis.</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <!-- Modal de Produto -->
+  <div id="modalProduto" class="modal">
+    <div class="modal-conteudo">
+      <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
+      <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+      <h3 id="modalTitulo"></h3>
+      <p id="modalDescricao"></p>
+      <p><strong id="modalPreco"></strong></p>
+
+      <!-- Novos detalhes -->
+      <p><strong>Fabricante:</strong> <span id="modalFabricante"></span></p>
+      <p><strong>Comprimento:</strong> <span id="modalComprimento"></span></p>
+      <p><strong>Peso:</strong> <span id="modalPeso"></span></p>
+      <p><strong>Estoque:</strong> <span id="modalEstoque"></span></p>
+
+      <form id="modalForm" method="POST" action="/adicionar">
+        <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
+        <button type="submit" class="botao">Adicionar ao Carrinho</button>
+      </form>
     </div>
+  </div>
 
-    <script>
-      document.querySelector('.categorias-toggle').addEventListener('click', function() {
-          var subcategorias = document.querySelector('.subcategorias');
-          var seta = document.querySelector('.seta');
-          subcategorias.style.display = subcategorias.style.display === 'block' ? 'none' : 'block';
-          seta.classList.toggle('seta-up');
+  <script>
+    document.querySelector('.categorias-toggle').addEventListener('click', function() {
+      var subcategorias = document.querySelector('.subcategorias');
+      var seta = document.querySelector('.seta');
+      subcategorias.style.display = subcategorias.style.display === 'block' ? 'none' : 'block';
+      seta.classList.toggle('seta-up');
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      window.abrirModal = function(titulo, preco, descricao, imagem, codigoProduto, fabricante, categoria, comprimento, peso, estoque) {
+        const modal = document.getElementById('modalProduto');
+        document.getElementById('modalTitulo').textContent = titulo;
+        document.getElementById('modalPreco').textContent = `R$ ${preco}`;
+        document.getElementById('modalDescricao').textContent = descricao;
+        document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';
+        document.getElementById('modalCodigoProduto').value = codigoProduto;
+
+        // Novos campos
+        document.getElementById('modalFabricante').textContent = fabricante || '-';
+        document.getElementById('modalComprimento').textContent = comprimento || '-';
+        document.getElementById('modalPeso').textContent = peso ? `${peso} kg` : '-';
+        document.getElementById('modalEstoque').textContent = estoque || '-';
+
+        modal.style.display = 'block';
+      };
+
+      window.fecharModal = function() {
+        const modal = document.getElementById('modalProduto');
+        if (modal) modal.style.display = 'none';
+      };
+
+      window.onclick = function(event) {
+        const modal = document.getElementById('modalProduto');
+        if (event.target === modal) {
+          fecharModal();
+        }
+      };
+
+      // Sidebar JS
+      const menuToggle = document.querySelector('.menu-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      const fecharSidebar = document.querySelector('.fechar-sidebar');
+
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.add('show');
       });
 
+      fecharSidebar.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+      });
 
-      document.addEventListener("DOMContentLoaded", () => {
-        window.abrirModal = function(titulo, preco, descricao, imagem, codigoProduto) {
-          const modal = document.getElementById('modalProduto');
-          document.getElementById('modalTitulo').textContent = titulo;
-          document.getElementById('modalPreco').textContent = preco;
-          document.getElementById('modalDescricao').textContent = descricao;
-          document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';
-          document.getElementById('modalCodigoProduto').value = codigoProduto;
-          modal.style.display = 'block';
-        };
+      // Função para filtrar os produtos por categoria
+      function filtrarProdutosPorCategoria(categoriaSelecionada) {
+        const produtos = document.querySelectorAll('.produto');
 
-        window.fecharModal = function() {
-          const modal = document.getElementById('modalProduto');
-          if (modal) modal.style.display = 'none';
-        };
+        produtos.forEach(produto => {
+          const categoriaProduto = produto.querySelector('.categoria').textContent.trim();
 
-        window.onclick = function(event) {
-          const modal = document.getElementById('modalProduto');
-          if (event.target === modal) {
-            fecharModal();
+          // Mostrar ou esconder o produto baseado na categoria selecionada
+          if (categoriaSelecionada === 'Todos' || categoriaProduto === categoriaSelecionada) {
+            produto.style.display = 'block'; // Exibir o produto
+          } else {
+            produto.style.display = 'none'; // Ocultar o produto
           }
-        };
-
-        // Sidebar JS
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
-        const fecharSidebar = document.querySelector('.fechar-sidebar');
-
-        menuToggle.addEventListener('click', () => {
-          sidebar.classList.add('show');
         });
+      }
 
-        fecharSidebar.addEventListener('click', () => {
-          sidebar.classList.remove('show');
+      // Adicionando evento para as categorias
+      const categoriasLinks = document.querySelectorAll('.filtrar-categoria');
+      categoriasLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault();
+          const categoriaSelecionada = event.target.getAttribute('data-categoria');
+          filtrarProdutosPorCategoria(categoriaSelecionada);
         });
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
   </html>

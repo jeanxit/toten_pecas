@@ -129,11 +129,15 @@ def loja():
                 imagem_url = 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'  # fallback
 
             produto_formatado = {
-                'CodigoProduto': produto.get('CodigoProduto'),
-                'Descricao': produto.get('Descricao'),
-                'PrecoVenda': preco_float,
-                'Imagem': imagem_url
-            }
+            'CodigoProduto': produto.get('CodigoProduto'),
+            'Descricao': produto.get('Descricao'),
+            'PrecoVenda': preco_float,
+            'Imagem': imagem_url,
+            'Fabricante': produto.get('Fabricante', '-'),
+            'ComprimentoCM': produto.get('ComprimentoCM', '-'),
+            'PesoCM': produto.get('PesoCM', '-'),
+            'QuantidadeEstoque': produto.get('QuantidadeEstoque', '-')
+        }
 
             produtos_formatados.append(produto_formatado)
 
