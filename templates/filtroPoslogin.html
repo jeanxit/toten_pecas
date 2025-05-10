@@ -7,183 +7,188 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #1E3161;
-      color: white;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      position: relative;
-    }
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #1E3161;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
 
-    .welcome {
-      position: absolute;
-      top: 160px; 
-      width: 100%;
-      text-align: center;
-      margin-top: 40px;
-    }
-    
-    .speech-bubble {
-      display: inline-block;
-      background-color: #4DA8DA; 
-      color: white;
-      padding: 25px 40px; 
-      border-radius: 30px;
-      font-size: 32px; 
-      position: relative;
-      font-weight: 600;
-    }
-    
-    
-    
-    @media (max-width: 768px) {
-      .welcome {
-        top: 180px; 
-      }
-    
-      .speech-bubble {
-        font-size: 28px; 
-        padding: 20px 35px; 
-      }
-    }
-    
-    
-    
+.welcome {
+  position: absolute;
+  top: 160px; 
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+}
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 40px;
-      text-align: center;
-    }
+.speech-bubble {
+  display: inline-block;
+  background-color: #4DA8DA; 
+  color: white;
+  padding: 30px 50px; 
+  border-radius: 30px;
+  font-size: 36px; 
+  position: relative;
+  font-weight: 600;
+}
 
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 30px;
-      width: 100%;
-      max-width: 700px;
-    }
+h1 {
+  font-size: 40px;
+  margin-bottom: 60px;
+  text-align: center;
+}
 
-    .option-button {
-      background-color: #ffffff10;
-      border: 2px solid #fff;
-      border-radius: 16px;
-      padding: 40px 20px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: 600;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  width: 100%;
+  max-width: 1000px;
+}
 
-    .option-button:hover {
-      background-color: #ffffff20;
-      transform: scale(1.03);
-    }
+.option-button {
+  background-color: #ffffff10;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 80px 40px;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 180px;
+}
 
+.option-button:hover {
+  background-color: #ffffff20;
+  transform: scale(1.05);
+}
 
-    .centralizar {
-      grid-column: span 2;
-      justify-self: center;
-      width: 50%;
-    }
+.centralizar {
+  grid-column: span 2;
+  justify-self: center;
+  width: 70%;
+}
 
-    @media (max-width: 768px) {
-      .grid-container {
-        grid-template-columns: 1fr;
-      }
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
 
-      h1 {
-        font-size: 26px;
-      }
+  h1 {
+    font-size: 30px;
+  }
 
-      .option-button {
-        font-size: 20px;
-        padding: 30px;
-      }
+  .option-button {
+    font-size: 28px;
+    padding: 60px;
+    height: auto;
+  }
 
-      .centralizar {
-        grid-column: auto;
-        width: 100%;
-      }
-    }
+  .centralizar {
+    grid-column: auto;
+    width: 100%;
+  }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.6);
-      align-items: center;
-      justify-content: center;
-    }
+  .speech-bubble {
+    font-size: 28px;
+    padding: 25px 35px;
+  }
+}
 
-    .modal-content {
-      background-color: #fff;
-      color: #1E3161;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      position: relative;
-    }
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+}
 
-    .modal-content h2 {
-      margin-bottom: 20px;
-    }
+.modal-content {
+  background-color: #fff;
+  color: #1E3161;
+  padding: 40px;
+  border-radius: 14px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
 
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 20px;
-      color: #1E3161;
-      cursor: pointer;
-    }
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+}
 
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 26px;
+  color: #1E3161;
+  cursor: pointer;
+}
 
-    .btn-buscar {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #1E3161;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+input[type="text"] {
+  padding: 12px;
+  width: 85%;
+  margin-top: 15px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-    .btn-buscar:hover {
-      background-color: #16264d;
-    }
+.btn-buscar {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 18px;
+  background-color: #1E3161;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-buscar:hover {
+  background-color: #16264d;
+}
+
+label[for="file-upload"] {
+  font-size: 16px;
+}
+
   </style>
 </head>
 <body>
   <div class="welcome">
     <div class="speech-bubble">Bem-vindo, {{ session.get('nome', 'usuário') }}!</div>
   </div>
-
+<br>
+<br>
+<br>
+<br>
+<br>
   <h1>Como deseja buscar?</h1>
   <div class="grid-container">
     <div class="option-button" onclick="window.location.href='buscaCategoria.html';">🔧 Buscar por Categoria</div>
@@ -215,13 +220,13 @@
     </div>
   </div>
 
- <!-- Modal Estoque -->
-<div id="modal-estoque" class="modal" style="display: none;">
-  <div class="modal-content">
-    <h2>Consultar Estoque</h2>
-    <p>Conectando ao sistema de estoque...</p>
+  <!-- Modal Estoque -->
+  <div id="modal-estoque" class="modal">
+    <div class="modal-content">
+      <h2>Consultar Estoque</h2>
+      <p>Conectando ao sistema de estoque...</p>
+    </div>
   </div>
-</div>
 
   <!-- Modal QR -->
   <div id="modal-qr" class="modal">
@@ -251,29 +256,28 @@
   </div>
 
   <script>
-
     function abrirModal(tipo) {
       const modal = document.getElementById(`modal-${tipo}`);
       modal.style.display = 'flex';
-  
+
       if (tipo === 'estoque') {
         setTimeout(() => {
           window.location.href = '/loja';
-        }, 10); // Redireciona após 3 segundos
+        }, 10);
       }
     }
-  
+
     function fecharModal(tipo) {
       document.getElementById(`modal-${tipo}`).style.display = 'none';
     }
-  
+
     function handleFile(file) {
       if (file) {
         alert("Arquivo selecionado: " + file.name);
         // Aqui você pode implementar a leitura real do código com uma biblioteca JS
       }
     }
-  
+
     function buscarChassi() {
       const valor = document.getElementById('input-chassi').value.trim();
       if (valor) {
@@ -283,7 +287,7 @@
         alert("Por favor, digite um número de chassi.");
       }
     }
-  
+
     function buscarNF() {
       const valor = document.getElementById('input-nf').value.trim();
       if (valor) {
@@ -293,7 +297,7 @@
         alert("Por favor, digite um número de nota fiscal.");
       }
     }
-  
+
     function buscarCategoria() {
       const valor = document.getElementById('input-categoria').value.trim();
       if (valor) {

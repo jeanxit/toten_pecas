@@ -1,297 +1,577 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grupo AIZ | Loja de Peças para Caminhões</title>
-  <style>
-    :root {
-      --azul-escuro: #1E3161;
-      --azul-claro: #369ED8;
-      --verde-claro: #4CAF50;
-      --verde-escuro: #388E3C;
-      --cinza-fundo: #f5f7fa;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--cinza-fundo);
-      color: var(--azul-escuro);
-      font-size: 18px;
-    }
-
-    header {
-      background: var(--azul-escuro);
-      color: white;
-      padding: 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .logo {
-      text-align: center;
-      flex-grow: 1;
-    }
-
-    .logo img {
-      height: 60px;
-    }
-
-    .carrinho {
-      font-size: 32px;
-      cursor: pointer;
-      transition: color 0.3s ease;
-      color: white;
-      text-decoration: none;
-    }
-
-    .carrinho:hover {
-      color: var(--azul-claro);
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 30px;
-    }
-
-    .bem-vindo h2 {
-      font-size: 26px;
-    }
-
-    .produtos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .produto {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .produto:hover {
-      transform: translateY(-4px);
-    }
-
-    .produto img {
-      width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: contain;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      background-color: #fff;
-    }
-
-    .produto h3 {
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-
-    .produto p {
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .produto p strong {
-      font-size: 22px;
-      color: var(--verde-claro);
-      font-weight: bold;
-    }
-
-    .botao {
-      background-color: var(--verde-claro);
-      border: none;
-      color: white;
-      padding: 14px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s ease;
-      font-size: 16px;
-    }
-
-    .botao:hover {
-      background-color: var(--verde-escuro);
-      transform: translateY(-3px);
-    }
-
-    .botao:active {
-      transform: translateY(2px);
-    }
-
-    @media (max-width: 500px) {
-      header h1 {
-        font-size: 22px;
+  <!DOCTYPE html>
+  <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Grupo AIZ | Loja de Peças para Caminhões</title>
+    <style>
+      :root {
+        --azul-escuro: #1E3161;
+        --azul-claro: #369ED8;
+        --verde-claro: #4CAF50;
+        --verde-escuro: #388E3C;
+        --cinza-fundo: #f5f7fa;
       }
 
-      .produto h3 {
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: var(--cinza-fundo);
+        color: var(--azul-escuro);
         font-size: 18px;
       }
 
-      .produto p {
-        font-size: 12px;
+      header {
+        background: var(--azul-escuro);
+        color: white;
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
       }
-    }
-    .preco-produto {
-        margin-top: auto;
-        font-size: 14px;
+
+      .logo {
+        text-align: center;
+        flex-grow: 1;
       }
-      
-      .preco-produto strong {
-        font-size: 22px;
-        color: var(--verde-claro);
-        font-weight: bold;
+
+      .logo img {
+        height: 60px;
       }
-      
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(30, 49, 97, 0.85);
+      .carrinho {
+        font-size: 32px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        color: white;
+        text-decoration: none;
+      }
+
+      .carrinho:hover {
+        color: var(--azul-claro);
+      }
+
+      .menu-toggle {
+        background: none;
+        border: none;
+        font-size: 30px;
+        cursor: pointer;
+        color: white;
+      }
+
+      /* Estilo para a sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Ajuste a largura para 300px */
+    width: 300px; /* Largura aumentada da sidebar */
+    height: 100%;
+    background-color: #fff;
+    padding: 20px 0;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0 20px 20px 0;
+    transition: left 0.3s ease;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 0px;
+  }
+
+  /* Exibe a sidebar quando a classe "show" for aplicada */
+  .sidebar.show {
+    left: 0;
+  }
+  .bem-vindo {
+  background-color: #F5F7FA; /* fundo claro */
+  padding: 20px; /* espaçamento interno */
+  border-radius: 10px; /* cantos arredondados */
+  text-align: center; /* centraliza o texto */
+  margin-bottom: 20px; /* espaço abaixo */
+}
+
+.bem-vindo h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.bem-vindo p {
+  font-size: 16px;
+  color: #666;
+}
+
+
+  /* Lista de itens na sidebar */
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+  }
+
+  .sidebar ul li {
+    margin: 10px 0;
+  }
+
+  /* Ajuste para a largura do fundo azul das categorias */
+  .sidebar ul li a {
+    color: #fff; /* Cor da letra em branco */
+    background-color: #1E3161; /* Cor de fundo azul escuro */
+    padding: 10px 15px; /* Ajuste do padding para diminuir a largura */
+    text-decoration: none;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    width: 240px; /* A largura será determinada pelo conteúdo */
+    margin-left: 10px;
+
+  }
+
+  /* Opcional: Ajuste para quando o item estiver em hover */
+  .sidebar ul li a:hover {
+    background-color: #005b99; /* Cor mais clara quando passar o mouse */
+    color: white;
+  }
+
+
+  /* Botão de fechar a sidebar */
+  .fechar-sidebar {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #6c5ce7;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  /* Ajustes nos produtos */
+  .produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .produto {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 4px solid #0056b3;
+  }
+
+  .produto:hover {
+    transform: translateY(-4px);
+  }
+
+  .produto img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #fff;
+  }
+
+  .produto h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .produto p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .produto p strong {
+    font-size: 22px;
+    color: var(--verde-claro);
+    font-weight: bold;
+  }
+
+  .botao {
+    background-color: var(--verde-claro);
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s ease;
+    font-size: 16px;
+  }
+
+  .botao:hover {
+    background-color: var(--verde-escuro);
+    transform: translateY(-3px);
+  }
+
+  .botao:active {
+    transform: translateY(2px);
+  }
+
+  /* Media queries */
+  @media (max-width: 500px) {
+    header h1 {
+      font-size: 22px;
     }
 
-    .modal-conteudo {
-      background-color: #fff;
-      margin: 5% auto;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 600px;
-      position: relative;
-      text-align: center;
+    .produto h3 {
+      font-size: 18px;
     }
 
-    .modal-conteudo img {
-      width: 100%;
-      height: auto;
-      margin-bottom: 15px;
+    .produto p {
+      font-size: 12px;
+    }
+  }
+
+  .preco-produto {
+    margin-top: auto;
+    font-size: 14px;
+  }
+
+  .preco-produto strong {
+    font-size: 22px;
+    color: var(--verde-claro);
+    font-weight: bold;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(30, 49, 97, 0.85);
+  }
+
+  .modal-conteudo {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    position: relative;
+    text-align: center;
+  }
+
+  .modal-conteudo img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+
+  .fechar {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 28px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .fechar:hover {
+    color: black;
+  }
+
+  #modalPreco {
+    font-size: 24px;
+    color: var(--verde-claro);
+    font-weight: bold;
+    margin-top: 20px;
+  }
+
+  /* Estilo para subcategorias */
+  .subcategorias {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+  }
+
+  .subcategorias li a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .subcategorias li a:hover {
+    color: #007BFF;
+  }
+
+  /* Estilo da seta */
+  .seta {
+    font-size: 16px;
+    margin-left: 10px;
+    transition: transform 0.3s;
+  }
+
+  .seta-up {
+    transform: rotate(-180deg);
+  }
+
+  /* Estilo para os itens principais */
+  .item-principal {
+    color: rgb(255, 255, 255); /* Azul escuro */
+    background-color: #003366; /* Cor de fundo clara */
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    border-radius: 5px; /* Bordas arredondadas */
+    margin: 5px 0;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .item-principal:hover {
+    background-color: #fff; /* Fundo branco ao passar o mouse */
+    color: #003366; /* Texto azul escuro ao passar o mouse */
+  }
+
+  /* Estilo para a nova div categorias-container */
+  .categorias-container {
+      padding: 10px;
+      background-color: transparent; /* Cor de fundo */
       border-radius: 8px;
-    }
+      margin-bottom: 20px; /* Espaçamento inferior */
+  }
 
-    .fechar {
-      color: #aaa;
-      position: absolute;
-      top: 15px;
-      right: 25px;
-      font-size: 28px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
+  .categorias-container .subcategorias {
+      list-style: none;
+      padding-left: 0px;
+      margin: 0;
+  }
 
-    .fechar:hover {
-      color: black;
-    }
+  .categorias-container .subcategorias li a {
+      color: #333;
+      background-color: #d3d3d3;
+      padding: 10px 15px;
+      text-decoration: none;
+      display: block;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
+  }
 
-    #modalPreco {
-      font-size: 24px;
-      color: var(--verde-claro);
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo">
-      <a href="/">
-        <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+  .categorias-container .subcategorias li a:hover {
+      background-color: #b0b0b0;
+      color: #fff;
+  }
+
+  .perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .foto-perfil {
+    width: 80px;
+    height: 80px;
+    background-color: #ccc;
+    border-radius: 50%;
+    background-image: url('https://i.ibb.co/DDzyBSkm/do-utilizador.png'); /* Troque para foto real */
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 10px;
+  }
+
+  .nome-perfil {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+  }
+
+  .botao-sair {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  width: calc(100% - 20px);
+  transition: background 0.3s;
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  right: 10px;
+  margin-bottom: 10px;
+}
+
+
+  .botao-sair:hover {
+    background-color: #c9302c;
+  }
+
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <div style="margin: 0 15px;">
+        <button class="menu-toggle">&#9776;</button>
+      </div>
+
+      <div class="logo">
+        <a href="/">
+          <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+        </a>
+      </div>
+
+      <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">
+        <img src="https://i.ibb.co/wh510dXq/grocery-store.png" alt="Carrinho de compras" style="width: 40px; height: 40px;">
       </a>
-    </div>
-    <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">🛒 Ver Carrinho</a>
-  </header>
-  <main class="container">
-    <section class="bem-vindo">
-      <h2>Olá, {{ nome }} 👋</h2>
-      <p>Confira os itens disponíveis e monte seu pedido:</p>
-    </section>
+    </header>
 
-    <section class="produtos-grid">
-      {% if produtos %}
-        {% for p in produtos %}
-        <div class="produto">
-          <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
-          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
-          <div class="preco-produto">
-            <p>Preço:
-              <strong>
-                R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
-              </strong>
-            </p>
-          </div>
-          <button class="botao" style="margin-top: 10px;"
-            onclick="abrirModal('{{ p['Descricao'] }}', 
-                                'R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}',
-                                '{{ p['Descricao'] }}', 
-                                '{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}', 
-                                '{{ p['CodigoProduto'] }}')">
-            Ver Detalhes
-          </button>
+    <!-- Sidebar -->
+  <nav class="sidebar">
+    <button class="fechar-sidebar">&times;</button>
+
+    <div class="perfil">
+      <div class="foto-perfil"></div>
+      <div class="nome-perfil">Olá, {{ nome }}</div>
+    </div>
+
+    <ul>
+      <li><a href="/" class="item-principal">Início</a></li>
+      <li>
+        <a href="javascript:void(0);" class="categorias-toggle">
+          Categorias <span class="seta">&#9660;</span>
+        </a>
+        <div class="categorias-container">
+          <ul class="subcategorias">
+            <li><a href="#">Anfíbia</a></li>
+            <li><a href="#">Bitrem</a></li>
+            <li><a href="#">Comboio</a></li>
+            <li><a href="#">Escavadeira</a></li>
+            <li><a href="#">Guindaste</a></li>
+            <li><a href="#">Peças AIZ</a></li>
+            <li><a href="#">Peças Diversas</a></li>
+            <li><a href="#">Pipa</a></li>
+            <li><a href="#">Rodotrem</a></li>
+            <li><a href="#">Outro</a></li>
+          </ul>
         </div>
-        {% endfor %}
-      {% else %}
-        <p>Não há produtos disponíveis.</p>
-      {% endif %}
-    </section>
-  </main>
+      </li>
+      <li><a href="/carrinho" class="item-principal">Carrinho</a></li>
+      <li><a href="/contato" class="item-principal">Contato</a></li>
+    </ul>
 
-  <!-- Modal de Produto -->
-  <div id="modalProduto" class="modal">
-    <div class="modal-conteudo">
-      <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
-      <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
-      <h3 id="modalTitulo"></h3>
-      <p id="modalDescricao"></p>
-      <p><strong id="modalPreco"></strong></p>
-      <form id="modalForm" method="POST" action="/adicionar">
-        <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
-        <button type="submit" class="botao">Adicionar ao Carrinho</button>
-      </form>
+    <button class="botao-sair">Sair da Conta</button>
+  </nav>
+
+
+    <main class="container">
+      <section class="bem-vindo">
+        <h2>Olá, {{ nome }} 👋</h2>
+        <p>Confira os itens disponíveis e monte seu pedido:</p>
+      </section>
+
+      <section class="produtos-grid">
+        {% if produtos %}
+          {% for p in produtos %}
+          <div class="produto">
+            <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
+            <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+            <div class="preco-produto">
+              <p>
+                <strong>
+                  R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                </strong>
+              </p>
+            </div>
+            <button class="botao" style="margin-top: 10px;"
+              onclick="abrirModal('{{ p['Descricao'] }}', 
+                                  'R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(',', 'X').replace('.', ',').replace('X', '.') }}',
+                                  '{{ p['Descricao'] }}', 
+                                  '{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}', 
+                                  '{{ p['CodigoProduto'] }}')">
+              Ver Detalhes
+            </button>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p>Não há produtos disponíveis.</p>
+        {% endif %}
+      </section>
+    </main>
+
+    <!-- Modal de Produto -->
+    <div id="modalProduto" class="modal">
+      <div class="modal-conteudo">
+        <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
+        <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+        <h3 id="modalTitulo"></h3>
+        <p id="modalDescricao"></p>
+        <p><strong id="modalPreco"></strong></p>
+        <form id="modalForm" method="POST" action="/adicionar">
+          <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
+          <button type="submit" class="botao">Adicionar ao Carrinho</button>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      window.abrirModal = function(titulo, preco, descricao, imagem, codigoProduto) {
-        const modal = document.getElementById('modalProduto');
-        document.getElementById('modalTitulo').textContent = titulo;
-        document.getElementById('modalPreco').textContent = preco;
-        document.getElementById('modalDescricao').textContent = descricao;
-        document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';
-        document.getElementById('modalCodigoProduto').value = codigoProduto;  // Define o código do produto no campo oculto
-        modal.style.display = 'block';
-      };
+    <script>
+      document.querySelector('.categorias-toggle').addEventListener('click', function() {
+          var subcategorias = document.querySelector('.subcategorias');
+          var seta = document.querySelector('.seta');
+          subcategorias.style.display = subcategorias.style.display === 'block' ? 'none' : 'block';
+          seta.classList.toggle('seta-up');
+      });
 
-      window.fecharModal = function() {
-        const modal = document.getElementById('modalProduto');
-        if (modal) modal.style.display = 'none';
-      };
 
-      window.onclick = function(event) {
-        const modal = document.getElementById('modalProduto');
-        if (event.target === modal) {
-          fecharModal();
-        }
-      };
-    });
-  </script>
-</body> 
-</html>
+      document.addEventListener("DOMContentLoaded", () => {
+        window.abrirModal = function(titulo, preco, descricao, imagem, codigoProduto) {
+          const modal = document.getElementById('modalProduto');
+          document.getElementById('modalTitulo').textContent = titulo;
+          document.getElementById('modalPreco').textContent = preco;
+          document.getElementById('modalDescricao').textContent = descricao;
+          document.getElementById('modalImagem').src = imagem || 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg';
+          document.getElementById('modalCodigoProduto').value = codigoProduto;
+          modal.style.display = 'block';
+        };
+
+        window.fecharModal = function() {
+          const modal = document.getElementById('modalProduto');
+          if (modal) modal.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+          const modal = document.getElementById('modalProduto');
+          if (event.target === modal) {
+            fecharModal();
+          }
+        };
+
+        // Sidebar JS
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const fecharSidebar = document.querySelector('.fechar-sidebar');
+
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.add('show');
+        });
+
+        fecharSidebar.addEventListener('click', () => {
+          sidebar.classList.remove('show');
+        });
+      });
+    </script>
+  </body>
+  </html>
