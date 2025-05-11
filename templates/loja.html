@@ -137,7 +137,20 @@
     color: white;
   }
 
+.botao {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
 
+  .botao:hover {
+    background-color: #0056b3;
+  }
   /* Botão de fechar a sidebar */
   .fechar-sidebar {
     background: none;
@@ -195,7 +208,7 @@
   }
 
   .produto .botao {
-    background-color: #007bff;
+    background-color: #1E3161;
     color: #fff;
     padding: 8px 16px;
     border: none;
@@ -460,6 +473,7 @@
           
           <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
           <h3> {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <br>
           <div class="preco-produto">
             <p>
               <strong>
