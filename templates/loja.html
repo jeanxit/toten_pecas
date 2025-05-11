@@ -169,6 +169,7 @@
     text-align: center;
     cursor: pointer;
     border-bottom: 4px solid #0056b3;
+    min-height: 420px; /* ou ajuste conforme necessário */
   }
 
   .produto:hover {
@@ -185,14 +186,17 @@
   }
 
   .produto h3 {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
+  font-size: 20px;
+  margin-bottom: 10px;
+  min-height: 48px; /* Garante espaço consistente */
+}
 
-  .produto p {
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
+.produto p {
+  font-size: 14px;
+  margin-bottom: 15px;
+  min-height: 60px; /* Ajuste conforme o tamanho médio da descrição */
+}
+
 
   .produto p strong {
     font-size: 22px;
@@ -210,6 +214,7 @@
     cursor: pointer;
     transition: background 0.3s, transform 0.3s ease;
     font-size: 16px;
+  margin-top: 10px;
   }
 
   .botao:hover {
@@ -237,9 +242,10 @@
   }
 
   .preco-produto {
-    margin-top: auto;
-    font-size: 14px;
-  }
+  margin-top: auto;
+  font-size: 14px;
+}
+
 
   .preco-produto strong {
     font-size: 22px;
