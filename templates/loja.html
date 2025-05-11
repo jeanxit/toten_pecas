@@ -170,7 +170,7 @@
   cursor: pointer;
   border-bottom: 4px solid #0056b3;
   position: relative; /* Necessário para o posicionamento absoluto dentro do card */
-  height: 400px; /* Mantendo altura fixa, mas ajustável conforme o conteúdo */
+  height: 410px; /* Mantendo altura fixa, mas ajustável conforme o conteúdo */
 }
 
 .produto:hover {
@@ -517,7 +517,7 @@
           <div class="categoria" style="display: none;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
           
           <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
-          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <h3>🔩 {{ (p['Descricao'][:23] ~ '...') if p['Descricao'] and p['Descricao']|length > 23 else (p['Descricao'] if p['Descricao'] else 'Produto sem nome') }}</h3>
           <div class="preco-produto">
             <p>
               <strong>
@@ -525,12 +525,12 @@
               </strong>
             </p>
           </div>
-
+<br>
           <!-- Exibindo comprimento do produto no card -->
           <div class="comprimento-produto">
             <p style="color: #fff;"> {{ p['ComprimentoCM'] | default('-') }}</p>
           </div>
-
+<br>
           <button class="botao" style="margin-top: 10px;"
             onclick="abrirModal(
               '{{ p['Descricao'] | escape }}', 
