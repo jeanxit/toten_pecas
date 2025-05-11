@@ -80,7 +80,16 @@ def register():
     conn.commit()
     flash('Registro bem-sucedido! Agora faça login.', 'success')
     return redirect(url_for('index'))
+@app.route('/logout', methods=['POST'])
+def logout():
+    # Limpa a sessão inteira
+    session.clear()
 
+    # Feedback ao usuário
+    flash('Você saiu da conta com sucesso.', 'info')
+
+    # Redireciona para a página inicial
+    return redirect(url_for('index'))
 # ==================== LOJA ====================
 @app.route('/filtro')
 def filtro():

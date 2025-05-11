@@ -296,6 +296,7 @@
             <input type="hidden" name="produto.CodigoProduto" value="{{ produto.CodigoProduto }}">
           {% endfor %}
           <button type="submit" class="botao-finalizar">Finalizar Compra</button>
+           <a class="voltar" href="{{ url_for('loja') }}">← Voltar para a Loja</a>
         </form>
         <div class="secure">Compra segura e protegida</div>
       </div>
