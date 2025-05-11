@@ -536,16 +536,16 @@
 <div id="modalProduto" class="modal">
   <div class="modal-conteudo">
     <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
-    <img id="modalImagem" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+    <img id="modalImagem" style="width: 350px;" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
     <h3 id="modalTitulo"></h3>
 
     <!-- Descrição do Produto -->
     <!-- <p id="modalDescricao" style="margin-top: 10px;"></p> -->
 
     <p><strong id="modalPreco"></strong></p>
-
+<br>
     <!-- Título Especificações -->
-    <h4 style="margin-top: 20px;">Especificações</h4>
+    <h4 style="margin-top: 20px; font-size: 20px;">Especificações</h4>
 
     <!-- Tabela de Especificações -->
     <table id="modalEspecificacoes" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
@@ -569,7 +569,7 @@
 <br>
     <form id="modalForm" method="POST" action="/adicionar">
       <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
-      <button type="submit" class="botao">Adicionar ao Carrinho</button>
+      <button type="submit" style="width: 200px; height: 50px; font-size: 13px;" class="botao">Adicionar ao Carrinho</button>
     </form>
   </div>
 </div>
