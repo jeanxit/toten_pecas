@@ -513,27 +513,24 @@
       {% if produtos %}
         {% for p in produtos %}
         <div class="produto">
-  <!-- Categoria oculta para filtragem -->
-  <div class="categoria" style="display: none;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
+          <!-- Categoria oculta para filtragem -->
+          <div class="categoria" style="display: none;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
+          
+          <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
+          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <div class="preco-produto">
+            <p>
+              <strong>
+                R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
+              </strong>
+            </p>
+          </div>
 
-  <!-- Imagem do produto -->
-  <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
-  
-  <!-- Descrição do produto -->
-  <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
-  
-  <!-- Preço do produto -->
-  <div class="preco-produto">
-    <p>
-      <strong>
-        R$ {{ '{:,.2f}'.format(p['PrecoVenda'] if p['PrecoVenda'] != '-' else 0.00).replace(",", "X").replace(".", ",").replace("X", ".") }}
-      </strong>
-    </p>
-  </div>
+          <!-- Exibindo comprimento do produto no card -->
+          <div class="comprimento-produto">
+            <p style="color: #fff;"> {{ p['ComprimentoCM'] | default('-') }}</p>
+          </div>
 
-  <!-- Comprimento do produto (discreto, atrás do preço) -->
-  <div class="comprimento-produto">
-    <p style="color: #555; font-size: 14px; margin-top: 5px;">{{ p['ComprimentoCM'] | default('-') }} cm</p>
           <button class="botao" style="margin-top: 10px;"
             onclick="abrirModal(
               '{{ p['Descricao'] | escape }}', 
