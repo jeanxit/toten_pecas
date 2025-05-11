@@ -151,100 +151,66 @@
     margin-bottom: 10px;
   }
 
-  /* Ajustes nos produtos */
   .produtos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
+    padding: 20px;
   }
 
   .produto {
-    background: white;
+    background: #fff;
     border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     padding: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
-    display: flex;
-    flex-direction: column;
     text-align: center;
-    cursor: pointer;
-    border-bottom: 4px solid #0056b3;
+    transition: transform 0.2s ease;
   }
 
   .produto:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
   }
 
   .produto img {
     width: 100%;
-    aspect-ratio: 4/3;
+    height: 180px;
     object-fit: contain;
     border-radius: 8px;
-    margin-bottom: 15px;
-    background-color: #fff;
+    margin-bottom: 10px;
   }
 
   .produto h3 {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
-
-  .produto p {
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-
-  .produto p strong {
-    font-size: 22px;
-    color: var(--verde-claro);
-    font-weight: bold;
-  }
-
-  .botao {
-    background-color: var(--verde-claro);
-    border: none;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s ease;
-    font-size: 16px;
-  }
-
-  .botao:hover {
-    background-color: var(--verde-escuro);
-    transform: translateY(-3px);
-  }
-
-  .botao:active {
-    transform: translateY(2px);
-  }
-
-  /* Media queries */
-  @media (max-width: 500px) {
-    header h1 {
-      font-size: 22px;
-    }
-
-    .produto h3 {
-      font-size: 18px;
-    }
-
-    .produto p {
-      font-size: 12px;
-    }
+    font-size: 1.1rem;
+    color: #333;
+    margin: 10px 0;
+    height: 40px;
+    overflow: hidden;
   }
 
   .preco-produto {
-    margin-top: auto;
-    font-size: 14px;
+    font-size: 1.1rem;
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
-  .preco-produto strong {
-    font-size: 22px;
-    color: var(--verde-claro);
-    font-weight: bold;
+  .produto .botao {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+
+  .produto .botao:hover {
+    background-color: #0056b3;
+  }
+
+  .categoria {
+    display: none; /* Continua oculta, usada para filtragem */
   }
 
   /* Modal */
@@ -488,10 +454,10 @@
         {% for p in produtos %}
         <div class="produto">
           <!-- Categoria oculta para filtragem -->
-          <div class="categoria" style="display: none;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
+          <div class="categoria" style="display: flex;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
           
           <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
-          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <h3> {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
           <div class="preco-produto">
             <p>
               <strong>
@@ -501,9 +467,9 @@
           </div>
 
           <!-- Exibindo comprimento do produto no card -->
-          <div class="comprimento-produto">
+          <!-- <div class="comprimento-produto">
             <p style="color: #fff;"> {{ p['ComprimentoCM'] | default('-') }}</p>
-          </div>
+          </div> -->
 
           <button class="botao" style="margin-top: 10px;"
             onclick="abrirModal(
