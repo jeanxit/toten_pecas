@@ -411,11 +411,11 @@
 
     <div class="perfil">
       <div class="foto-perfil"></div>
-      <div class="nome-perfil">Olá, {{ nome }}</div>
+      <div class="nome-perfil"> {{ nome }}</div>
     </div>
 
     <ul>
-      <li><a href="/" class="item-principal">Início</a></li>
+      <li><a href="/filtro" class="item-principal">Início</a></li>
       <li>
         <a href="javascript:void(0);" class="categorias-toggle">
           Categorias <span class="seta">&#9660;</span>
@@ -428,19 +428,21 @@
             <li><a href="#" data-categoria="Comboio" class="filtrar-categoria">Comboio</a></li>
             <li><a href="#" data-categoria="Escavadeira" class="filtrar-categoria">Escavadeira</a></li>
             <li><a href="#" data-categoria="Guindaste" class="filtrar-categoria">Guindaste</a></li>
-            <li><a href="#" data-categoria="Peças AIZ" class="filtrar-categoria">Peças AIZ</a></li>
-            <li><a href="#" data-categoria="Peças Diversas" class="filtrar-categoria">Peças Diversas</a></li>
+            <!-- <li><a href="#" data-categoria="Peças AIZ" class="filtrar-categoria">Peças AIZ</a></li> -->
+            <!-- <li><a href="#" data-categoria="Peças Diversas" class="filtrar-categoria">Peças Diversas</a></li> -->
             <li><a href="#" data-categoria="Pipa" class="filtrar-categoria">Pipa</a></li>
             <li><a href="#" data-categoria="Rodotrem" class="filtrar-categoria">Rodotrem</a></li>
             <li><a href="#" data-categoria="Outro" class="filtrar-categoria">Outro</a></li>
           </ul>
         </div>
       </li>
-      <li><a href="/carrinho" class="item-principal">Carrinho</a></li>
-      <li><a href="/contato" class="item-principal">Contato</a></li>
+      <!-- <li><a href="/carrinho" class="item-principal">Carrinho</a></li>
+      <li><a href="/contato" class="item-principal">Contato</a></li> -->
     </ul>
 
+    <form action="/logout" method="POST">
     <button class="botao-sair">Sair da Conta</button>
+    </form>
   </nav>
 
   <main class="container">
