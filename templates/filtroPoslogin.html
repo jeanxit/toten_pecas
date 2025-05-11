@@ -187,16 +187,14 @@ label[for="file-upload"] {
 <br>
 <br>
 <br>
-<br>
-<br>
   <h1>Como deseja buscar?</h1>
-  <div class="grid-container">
-    <div class="option-button" onclick="window.location.href='buscaCategoria.html';">🔧 Buscar por Categoria</div>
-    <div class="option-button" onclick="abrirModal('chassi')">🔍 Buscar por Chassi</div>
-    <div class="option-button" onclick="abrirModal('nf')">📄 Buscar por Nota Fiscal</div>
-    <div class="option-button" onclick="abrirModal('estoque')">📦 Consultar Estoque</div>
-    <div class="option-button centralizar" onclick="abrirModal('qr')">📱 Ler Código</div>
-  </div>
+ <div class="grid-container">
+   <div class="option-button" onclick="abrirModal('estoque')">📦 Consultar Estoque</div>
+   <div class="option-button" onclick="abrirModal('chassi')">🔍 Buscar por Chassi</div>
+  <div class="option-button" onclick="abrirModal('qr')">📱 Ler Código</div>
+  <div class="option-button" onclick="abrirModal('nf')">📄 Buscar por Nota Fiscal</div>
+  <!-- <div class="option-button centralizar" onclick="window.location.href='buscaCategoria.html';">🔧 Buscar por Categoria</div> -->
+</div>
 
   <!-- Modal Chassi -->
   <div id="modal-chassi" class="modal">
