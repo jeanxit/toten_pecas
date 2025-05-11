@@ -159,19 +159,17 @@
   }
 
   .produto {
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  cursor: pointer;
-  border-bottom: 4px solid #0056b3;
-  height: 330px;
-}
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 4px solid #0056b3;
+  }
 
   .produto:hover {
     transform: translateY(-4px);
@@ -187,22 +185,14 @@
   }
 
   .produto h3 {
-  font-size: 16px;
-  margin: 10px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
 
-.produto p {
-  font-size: 13px;
-  margin: 0 0 10px 0;
-  flex-grow: 1;
-  overflow: hidden;
-  max-height: 60px;
-}
-
+  .produto p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
 
   .produto p strong {
     font-size: 22px;
@@ -220,7 +210,6 @@
     cursor: pointer;
     transition: background 0.3s, transform 0.3s ease;
     font-size: 16px;
-    margin-top: 10px;
   }
 
   .botao:hover {
@@ -248,15 +237,15 @@
   }
 
   .preco-produto {
-  font-size: 14px;
-}
+    margin-top: auto;
+    font-size: 14px;
+  }
 
-
- .preco-produto strong {
-  font-size: 18px;
-  color: var(--verde-claro);
-  font-weight: bold;
-}
+  .preco-produto strong {
+    font-size: 22px;
+    color: var(--verde-claro);
+    font-weight: bold;
+  }
 
   /* Modal */
   .modal {
@@ -440,7 +429,7 @@
     </div>
 
     <div class="logo">
-      <a>
+      <a href="/">
         <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
       </a>
     </div>
@@ -456,11 +445,11 @@
 
     <div class="perfil">
       <div class="foto-perfil"></div>
-      <div class="nome-perfil"> {{ nome }}</div>
+      <div class="nome-perfil">Olá, {{ nome }}</div>
     </div>
 
     <ul>
-      <li><a href="/filtro" class="item-principal">Início</a></li>
+      <li><a href="/" class="item-principal">Início</a></li>
       <li>
         <a href="javascript:void(0);" class="categorias-toggle">
           Categorias <span class="seta">&#9660;</span>
@@ -473,21 +462,19 @@
             <li><a href="#" data-categoria="Comboio" class="filtrar-categoria">Comboio</a></li>
             <li><a href="#" data-categoria="Escavadeira" class="filtrar-categoria">Escavadeira</a></li>
             <li><a href="#" data-categoria="Guindaste" class="filtrar-categoria">Guindaste</a></li>
-            <!-- <li><a href="#" data-categoria="Peças AIZ" class="filtrar-categoria">Peças AIZ</a></li>
-            <li><a href="#" data-categoria="Peças Diversas" class="filtrar-categoria">Peças Diversas</a></li> -->
+            <li><a href="#" data-categoria="Peças AIZ" class="filtrar-categoria">Peças AIZ</a></li>
+            <li><a href="#" data-categoria="Peças Diversas" class="filtrar-categoria">Peças Diversas</a></li>
             <li><a href="#" data-categoria="Pipa" class="filtrar-categoria">Pipa</a></li>
             <li><a href="#" data-categoria="Rodotrem" class="filtrar-categoria">Rodotrem</a></li>
             <li><a href="#" data-categoria="Outro" class="filtrar-categoria">Outro</a></li>
           </ul>
         </div>
       </li>
-      <!-- <li><a href="/carrinho" class="item-principal">Carrinho</a></li>
-      <li><a href="/contato" class="item-principal">Contato</a></li> -->
+      <li><a href="/carrinho" class="item-principal">Carrinho</a></li>
+      <li><a href="/contato" class="item-principal">Contato</a></li>
     </ul>
 
-    <form action="/logout" method="POST">
     <button class="botao-sair">Sair da Conta</button>
-    </form>
   </nav>
 
   <main class="container">
@@ -504,7 +491,7 @@
           <div class="categoria" style="display: none;">{{ p['ComprimentoCM'] | default('Outro') }}</div>
           
           <img src="{{ p['Imagem'] or 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg' }}" alt="Imagem do Produto" />
-          <h3> {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
+          <h3>🔩 {{ p['Descricao'] if p['Descricao'] else 'Produto sem nome' }}</h3>
           <div class="preco-produto">
             <p>
               <strong>
