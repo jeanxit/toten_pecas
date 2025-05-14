@@ -9,7 +9,7 @@
       --azul-escuro: #1C294C;
       --azul-claro: #369ED8;
     }
-
+ 
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f5f7fa;
@@ -17,13 +17,13 @@
       padding: 20px;
       color: var(--azul-escuro);
     }
-
+ 
     h1 {
       color: var(--azul-escuro);
       text-align: center;
       margin-bottom: 30px;
     }
-
+ 
     .cart-container {
       max-width: 800px;
       margin: 30px auto;
@@ -34,11 +34,11 @@
       flex-direction: column;
       gap: 40px;
     }
-
+ 
     .cart-items h2 {
       font-size: 24px;
     }
-
+ 
     .cart-item {
       display: flex;
       align-items: center;
@@ -46,7 +46,7 @@
       width: 100%;
       gap: 20px;
     }
-
+ 
     .cart-item img {
       width: 100px;
       height: 100px;
@@ -57,12 +57,12 @@
       flex-shrink: 0;
       background-color: #f0f0f0;
     }
-
+ 
     .cart-item-details {
       flex: 2;
       min-width: 0;
     }
-
+ 
     .cart-item-details p {
       font-size: 18px;
       margin: 5px 0;
@@ -70,7 +70,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
+ 
     .quantity-control {
       display: flex;
       align-items: center;
@@ -78,7 +78,7 @@
       font-size: 18px;
       margin-left: 20px;
     }
-
+ 
     .quantity-control {
       flex: 0 0 120px;
       display: flex;
@@ -86,7 +86,7 @@
       justify-content: center;
       gap: 10px;
     }
-
+ 
     .quantity-control button {
       padding: 8px;
       background-color: var(--azul-claro);
@@ -99,11 +99,11 @@
       width: 40px;
       height: 40px;
     }
-
+ 
     .quantity-control button:hover {
       background-color: #2f3c74;
     }
-
+ 
     .quantity-control input {
       width: 50px;
       text-align: center;
@@ -119,7 +119,7 @@
       -webkit-appearance: none;
       margin: 0;
     }
-
+ 
     /* Remover as setas do input type="number" no Firefox */
     .quantity-control input[type="number"] {
       -moz-appearance: textfield;
@@ -127,7 +127,7 @@
     .quantity-control input:focus {
       border-color: #2f3c74;
     }
-
+ 
     .price {
       flex: 0 0 100px;
       font-size: 18px;
@@ -136,7 +136,7 @@
       text-align: right;
       white-space: nowrap; /* Impede a quebra de linha */
     }
-
+ 
     .cart-summary {
       width: 100%;
       background: #fafafa;
@@ -144,18 +144,18 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
-
+ 
     .cart-summary h3 {
       font-size: 22px;
     }
-
+ 
     .summary-line {
       display: flex;
       justify-content: space-between;
       margin: 15px 0;
       font-size: 18px;
     }
-
+ 
     .btn {
       background: #1C294C;
       color: white;
@@ -165,14 +165,14 @@
       border-radius: 6px;
       font-size: 22px;
     }
-
+ 
     .secure {
       font-size: 14px;
       color: gray;
       margin-top: 15px;
       text-align: center;
     }
-
+ 
     .botao-finalizar {
       display: block;
       width: fit-content;
@@ -188,11 +188,11 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
+ 
     .botao-finalizar:hover {
       background-color: #2a8dc2;
     }
-
+ 
     .voltar {
       display: block;
       margin-top: 30px;
@@ -201,7 +201,7 @@
       text-decoration: none;
       font-weight: bold;
     }
-
+ 
     .voltar:hover {
       text-decoration: underline;
     }
@@ -218,14 +218,14 @@
       </div>
     {% endif %}
   {% endwith %}
-
+ 
   <script>
     setTimeout(() => {
       const toasts = document.querySelectorAll('.toast');
       toasts.forEach(t => t.remove());
     }, 3000);
   </script>
-
+ 
   <style>
     .toast {
       position: fixed;
@@ -238,68 +238,28 @@
       z-index: 9999;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
-
+ 
     .toast-success {
       background-color: #28a745;
     }
-
+ 
     .toast-danger {
       background-color: #dc3545;
     }
-
+ 
     .toast-warning {
       background-color: #ffc107;
       color: #000;
     }
-     #modal-confirmacao {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 400px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-  }
-
-  .modal-content h2 {
-    color: green;
-    margin-bottom: 15px;
-  }
-
-  #modal-ok {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: var(--azul-claro);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  #modal-ok:hover {
-    background-color: #2a8dc2;
   </style>
-
+ 
   <h1>🛒 Carrinho de {{ session.get('nome', 'usuário') }}</h1>
-
+ 
   <div class="cart-container">
     {% if produtos %}
       <div class="cart-items">
         <h2>Meu carrinho (<span id="total-items-title">0</span> itens)</h2>
-
+ 
         {% set total = 0 %}
         {% for produto in produtos %}
           <div class="cart-item" id="cart-item-{{ produto.CodigoProduto }}">
@@ -321,7 +281,7 @@
           {% set total = total + produto.preco %}
         {% endfor %}
       </div>
-
+ 
       <div class="cart-summary">
         <h3>Resumo do carrinho</h3>
         <div class="summary-line">
@@ -345,39 +305,31 @@
       <a class="voltar" href="{{ url_for('loja') }}">← Voltar para a Loja</a>
     {% endif %}
   </div>
-
-<div id="modal-confirmacao" style="display: none;">
-  <div class="modal-content">
-    <h2>✅ Pedido Finalizado!</h2>
-    <p>Seu pedido foi enviado para a nossa equipe. Entraremos em contato em breve.</p>
-    <button id="modal-ok">OK</button>
-  </div>
-</div>
-
+ 
   <script>
     function formatToReal(value) {
       return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
-
+ 
     function increaseQuantity(itemId) {
       const quantityInput = document.getElementById(`quantity-${itemId}`);
       quantityInput.value = parseInt(quantityInput.value) + 1;
       updateTotal();
     }
-
+ 
     function decreaseQuantity(itemId) {
       const quantityInput = document.getElementById(`quantity-${itemId}`);
       let currentQuantity = parseInt(quantityInput.value);
-
+ 
       if (currentQuantity > 1) {
         quantityInput.value = currentQuantity - 1;
       } else {
         removeItem(itemId);
       }
-
+ 
       updateTotal();
     }
-
+ 
     function removeItem(itemId) {
       const itemElement = document.getElementById(`cart-item-${itemId}`);
       if (itemElement) {
@@ -385,11 +337,11 @@
         updateTotal();
       }
     }
-
+ 
     function updateTotal() {
       let total = 0;
       let itemCount = 0;
-
+ 
       const quantityInputs = document.querySelectorAll('input[type="number"]');
       quantityInputs.forEach((input) => {
         const quantity = parseInt(input.value) || 0;
@@ -397,28 +349,15 @@
         total += quantity * preco;
         itemCount += quantity;
       });
-
+ 
       document.getElementById('total-price').innerText = formatToReal(total);
       document.getElementById('total-items-title').innerText = itemCount;
       document.getElementById('total-items-summary').innerText = `Itens (${itemCount})`;
     }
-
+ 
     window.onload = function() {
       updateTotal();
     };
-    const finalizarForm = document.querySelector('form[action="{{ url_for(\'finalizar_compra\') }}"]');
-  const modal = document.getElementById('modal-confirmacao');
-  const modalOk = document.getElementById('modal-ok');
-
-  finalizarForm.addEventListener('submit', function(e) {
-    e.preventDefault(); // Impede o envio imediato
-    modal.style.display = 'flex';
-  });
-
-  modalOk.addEventListener('click', function() {
-    modal.style.display = 'none';
-    finalizarForm.submit(); // Envia o formulário após confirmação
-      });
   </script>
 </body>
 </html>
