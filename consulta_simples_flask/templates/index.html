@@ -12,13 +12,11 @@
         var cnpj = document.querySelector("input[name='cnpj']").value;
         var arquivo = document.querySelector("input[name='file']").value;
 
-        // Se nenhum dos dois foi preenchido
         if (!cnpj && !arquivo) {
             alert("Por favor, insira um CNPJ ou envie um arquivo Excel.");
             return false;
         }
 
-        // Se tiver CNPJ, validar
         if (cnpj) {
             cnpj = cnpj.replace(/\D/g, '');
             if (cnpj.length !== 14) {
@@ -31,7 +29,6 @@
         return true;
     }
 
-    // Função ajustada para exportar a tabela para Excel e preservar zeros à esquerda
     function exportarExcel() {
         var table = document.getElementById("resultadosTabela");
         var data = [];
@@ -40,16 +37,14 @@
             var rowData = [];
             for (var j = 0; j < row.cells.length; j++) {
                 var valor = row.cells[j].innerText;
-                // Força o tipo texto apenas para a coluna de CNPJ (coluna 0, exceto o cabeçalho)
                 if (j === 0 && i !== 0) {
                     rowData.push({ v: valor, t: "s" });
                 } else if (j === 1 && i !== 0) {
-                    // Ajusta os valores da coluna "Opção pelo Simples"
-                    if (valor === "true") {
+                    if (valor === "Sim") {
                         rowData.push("Sim");
-                    } else if (valor === "false") {
+                    } else if (valor === "Não") {
                         rowData.push("Não");
-                    } else if (valor === "null" || valor === "") {
+                    } else if (valor === "Vazio" || valor === "") {
                         rowData.push("Vazio");
                     } else {
                         rowData.push("Erro ao consultar");
@@ -88,27 +83,21 @@
 
         {% if resultados %}
             <h3>Resultado da Consulta:</h3>
-            <table id="resultadosTabela">
+            <table id="resultadosTabela" border="1" cellpadding="5" cellspacing="0">
                 <tr><th>CNPJ</th><th>Opção pelo Simples</th></tr>
                 {% for item in resultados %}
                     <tr>
                         <td>{{ item.CNPJ }}</td>
                         <td>
                             {% if item.opcao_pelo_simples is not none %}
-                                {% if item.opcao_pelo_simples == true %}
+                                {% if item.opcao_pelo_simples == True %}
                                     Sim
-                                {% elif item.opcao_pelo_simples == false %}
+                                {% elif item.opcao_pelo_simples == False %}
                                     Não
                                 {% elif item.opcao_pelo_simples == 'null' %}
                                     Vazio
                                 {% else %}
                                     Vazio
-                                {% endif %}
-                            {% elif item.message is not none %}
-                                {% if 'inválido' in item.message %}
-                                    Inválido
-                                {% else %}
-                                    {{ item.message }}
                                 {% endif %}
                             {% else %}
                                 Erro ao consultar
