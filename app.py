@@ -94,6 +94,12 @@ def logout():
 @app.route('/filtro')
 def filtro():
     return render_template('filtroPoslogin.html')
+@app.route('/html.html')
+def html():
+    return render_template('html.html')
+@app.route('/html1.html')
+def html1():
+    return render_template('html1.html')
 @app.route('/buscaCategoria.html')
 def busca_categoria():
     return render_template('buscaCategoria.html')

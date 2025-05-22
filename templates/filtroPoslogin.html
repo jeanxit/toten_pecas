@@ -196,16 +196,16 @@ label[for="file-upload"] {
   <!-- <div class="option-button centralizar" onclick="window.location.href='buscaCategoria.html';">🔧 Buscar por Categoria</div> -->
 </div>
 
-  <!-- Modal Chassi -->
-  <div id="modal-chassi" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="fecharModal('chassi')">&times;</span>
-      <h2>Buscar por Chassi</h2>
-      <p>Digite o número do chassi abaixo:</p>
-      <input type="text" placeholder="Ex: 9BWZZZ377VT004251" id="input-chassi" />
-      <button class="btn-buscar" onclick="buscarChassi()">Buscar</button>
-    </div>
+ <!-- Modal Chassi -->
+<div id="modal-chassi" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="fecharModal('chassi')">&times;</span>
+    <h2>Buscar por Chassi</h2>
+    <p>Digite o número do chassi abaixo:</p>
+    <input type="text" placeholder="Ex: 9BWZZZ377VT004251" id="input-chassi" />
+    <button class="btn-buscar" onclick="buscarChassi()">Buscar</button>
   </div>
+</div>
 
   <!-- Modal Nota Fiscal -->
   <div id="modal-nf" class="modal">
@@ -254,38 +254,38 @@ label[for="file-upload"] {
   </div>
 
   <script>
+    function buscarChassi() {
+      const valor = document.getElementById('input-chassi').value.trim();
+      if (valor) {
+        // Redireciona para html.html passando o chassi via query string
+        window.location.href = `html.html?chassi=${encodeURIComponent(valor)}`;
+      } else {
+        alert("Por favor, digite um número de chassi.");
+      }
+    }
+  
+    function fecharModal(tipo) {
+      document.getElementById(`modal-${tipo}`).style.display = 'none';
+    }
+  
     function abrirModal(tipo) {
       const modal = document.getElementById(`modal-${tipo}`);
       modal.style.display = 'flex';
-
+  
       if (tipo === 'estoque') {
         setTimeout(() => {
           window.location.href = '/loja';
         }, 10);
       }
     }
-
-    function fecharModal(tipo) {
-      document.getElementById(`modal-${tipo}`).style.display = 'none';
-    }
-
+  
     function handleFile(file) {
       if (file) {
         alert("Arquivo selecionado: " + file.name);
         // Aqui você pode implementar a leitura real do código com uma biblioteca JS
       }
     }
-
-    function buscarChassi() {
-      const valor = document.getElementById('input-chassi').value.trim();
-      if (valor) {
-        alert("Buscando chassi: " + valor);
-        // Implementar lógica real aqui
-      } else {
-        alert("Por favor, digite um número de chassi.");
-      }
-    }
-
+  
     function buscarNF() {
       const valor = document.getElementById('input-nf').value.trim();
       if (valor) {
@@ -295,7 +295,7 @@ label[for="file-upload"] {
         alert("Por favor, digite um número de nota fiscal.");
       }
     }
-
+  
     function buscarCategoria() {
       const valor = document.getElementById('input-categoria').value.trim();
       if (valor) {
@@ -305,6 +305,6 @@ label[for="file-upload"] {
         alert("Por favor, digite uma categoria.");
       }
     }
-  </script>
+  </script>  
 </body>
 </html>
