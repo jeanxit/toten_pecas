@@ -3,7 +3,7 @@
 mysql_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'erick',
+    'password': 'jean',
     'database': 'Jean_Erick',
     'connection_timeout': 3600,
     'auth_plugin': 'mysql_native_password'   # <-- adicionado para forçar plugin compatível

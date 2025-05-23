@@ -533,54 +533,69 @@
     </section>
   </main>
 
-<div id="modalProduto" class="modal">
-  <div class="modal-conteudo">
-    <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
-    <img id="modalImagem" style="width: 350px;" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
-    <h3 id="modalTitulo"></h3>
-
-    <!-- Descrição do Produto -->
-    <!-- <p id="modalDescricao" style="margin-top: 10px;"></p> -->
-
-    <p><strong id="modalPreco"></strong></p>
-<br>
-    <!-- Título Especificações -->
-    <h4 style="margin-top: 20px; font-size: 22px;">Especificações:</h4>
-
-    <!-- Tabela de Especificações -->
-    <table id="modalEspecificacoes" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
-      <tr>
-        <td><strong>Fabricante</strong></td>
-        <td id="modalFabricante"></td>
-      </tr>
-      <tr>
-        <td><strong>Tipo do Equipamento</strong></td>
-        <td id="modalComprimento"></td>
-      </tr>
-      <tr>
-        <td><strong>Peso</strong></td>
-        <td id="modalPeso"></td>
-      </tr>
-      <tr>
-        <td><strong>Estoque</strong></td>
-        <td id="modalEstoque"></td>
-      </tr>
-    </table>
-<br>
-    <form id="modalForm" method="POST" action="/adicionar">
-      <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
-    <button type="submit" style="width: 150px; height: 60px; font-size: 13px;  align-items: center; justify-content: center; border: none;" class="botao">
- <img src="https://i.ibb.co/Z6yPpNJt/adicionar-produto.png" alt="Adicionar ao Carrinho" style="width: 40px; height: 40px; margin-right: 10px;">
-</button>
-
-    </form>
+  <div id="modalProduto" class="modal">
+    <div class="modal-conteudo">
+      <button class="fechar" type="button" onclick="fecharModal()">&times;</button>
+      <img id="modalImagem" style="width: 350px;" src="https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg" alt="">
+      <h3 id="modalTitulo"></h3>
+  
+      <p><strong id="modalPreco"></strong></p>
+  
+      <h4 style="margin-top: 20px; font-size: 22px;">Especificações:</h4>
+  
+      <table id="modalEspecificacoes" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+        <tr>
+          <td><strong>Fabricante</strong></td>
+          <td id="modalFabricante"></td>
+        </tr>
+        <tr>
+          <td><strong>Tipo do Equipamento</strong></td>
+          <td id="modalComprimento"></td>
+        </tr>
+        <tr>
+          <td><strong>Peso</strong></td>
+          <td id="modalPeso"></td>
+        </tr>
+        <tr>
+          <td><strong>Estoque</strong></td>
+          <td id="modalEstoque"></td>
+        </tr>
+      </table>
+  
+      <br>
+  
+      <form id="modalForm" method="POST" action="/adicionar" style="display: flex; flex-direction: row; gap: 20px; justify-content: center; margin-top: 20px;">
+        <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
+      
+        <!-- Botão Ver Detalhes -->
+        <button type="button" onclick="verDetalhes()" style="width: 150px; height: 60px; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none;" class="botao">
+          <img src="https://i.ibb.co/mCb7XTDL/lupa.png" alt="Ver Detalhes" style="width: 30px; height: 30px; margin-right: 8px; display: block;">
+          <span style="line-height: 1;">Ver Detalhes</span>
+        </button>
+      
+        <!-- Botão Adicionar ao Carrinho -->
+        <button type="submit" style="width: 150px; height: 60px; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none;" class="botao">
+          <img src="https://i.ibb.co/Z6yPpNJt/adicionar-produto.png" alt="Adicionar ao Carrinho" style="width: 30px; height: 30px; margin-right: 8px; display: block;">
+          <span style="line-height: 1;">Adicionar</span>
+        </button>
+      </form>      
+    </div>
   </div>
-</div>
+  
 
 
 
 
   <script>
+    function verDetalhes() {
+  const codigoProduto = document.getElementById('modalCodigoProduto').value.trim();
+  if (codigoProduto) {
+    window.location.href = `html.html?chassi=${encodeURIComponent(codigoProduto)}`;
+  } else {
+    alert("Código do produto não disponível.");
+  }
+}
+
     document.querySelector('.categorias-toggle').addEventListener('click', function() {
       var subcategorias = document.querySelector('.subcategorias');
       var seta = document.querySelector('.seta');
