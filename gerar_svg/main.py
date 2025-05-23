@@ -49,6 +49,10 @@ for g in soup.find_all("g", id=re.compile(r"hotspot\.\d+")):
             "quantidade": quantidade
         }
 
+# === Remove todos os atributos onmousemove dos grupos de hotspot ===
+for g in soup.find_all("g", id=re.compile(r"hotspot\.\d+")):
+    g.attrs.pop("onmousemove", None)
+
 # === Serializa SVG final sem <metadata> ===
 svg_str = str(soup.svg)
 
@@ -60,6 +64,10 @@ produtos_js_entries = [
     f'"{k}": {{codigo: "{js_escape(v["codigo"])}", quantidade: {v["quantidade"]}}}'
     for k, v in produtos.items()
 ]
+
+# (o restante do seu código, por exemplo, geração do HTML e script JS, permanece igual)
+
+
 
 # === HTML completo ===
 html_template = f"""<!DOCTYPE html>
