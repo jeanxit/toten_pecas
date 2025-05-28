@@ -167,6 +167,91 @@ def loja():
         return render_template('loja.html', nome=nome, produtos=[])
     
 # ==================== CARRINHO ====================
+@app.route('/adicionar_svg', methods=['POST'])
+def adicionar_svg():
+    # Suporta JSON e form tradicional (no caso usaremos JSON)
+    if request.is_json:
+        data = request.get_json()
+        codigo = data.get('CodigoProduto')
+        quantidade = int(data.get('quantidade', 1))
+    else:
+        codigo = request.form.get('CodigoProduto')
+        quantidade = int(request.form.get('quantidade', 1))
+
+    if not codigo:
+        return jsonify({'erro': 'Código do produto não informado'}), 400
+
+    nome = session.get('nome')
+    carrinho_nome = f'carrinho_{nome}' if nome else 'carrinho'
+
+    if carrinho_nome not in session:
+        session[carrinho_nome] = []
+
+    carrinho = session[carrinho_nome]
+
+    for item in carrinho:
+        if item['CodigoProduto'] == codigo:
+            item['quantidade'] += quantidade
+            break
+    else:
+        carrinho.append({
+            'CodigoProduto': codigo,
+            'quantidade': quantidade,
+            'nome': f'Peça {codigo}',
+            'Imagem': 'https://i.ibb.co/fG9mF6qX/Captura-de-tela-2025-05-28-141648.png',
+            'preco': 100.00
+        })
+
+    session[carrinho_nome] = carrinho
+    session.modified = True
+
+    return jsonify({'mensagem': f'Produto {codigo} adicionado ao carrinho com quantidade {quantidade}.'})
+@app.route('/adicionar_svg_kit', methods=['POST'])
+def adicionar_svg_kit():
+    data = request.get_json()
+
+    # Espera receber uma lista de itens: [{CodigoProduto: "...", quantidade: n}, ...]
+    itens = data.get('itens', [])
+
+    if not itens:
+        return jsonify({'erro': 'Nenhum item recebido'}), 400
+
+    nome = session.get('nome')
+    carrinho_nome = f'carrinho_{nome}' if nome else 'carrinho'
+
+    # Cria carrinho na sessão se não existir
+    if carrinho_nome not in session:
+        session[carrinho_nome] = []
+
+    carrinho = session[carrinho_nome]
+
+    for item in itens:
+        codigo = item.get('CodigoProduto')
+        quantidade = int(item.get('quantidade', 1))
+
+        if not codigo:
+            continue  # Ignora itens sem código válido
+
+        # Atualiza quantidade se já existe no carrinho
+        for existente in carrinho:
+            if existente['CodigoProduto'] == codigo:
+                existente['quantidade'] += quantidade
+                break
+        else:
+            # Adiciona novo item no carrinho
+            carrinho.append({
+                'CodigoProduto': codigo,
+                'quantidade': quantidade,
+                'nome': f'Peça {codigo}',  # pode adaptar com nome real se quiser
+                'Imagem': 'https://i.ibb.co/fG9mF6qX/Captura-de-tela-2025-05-28-141648.png',  # imagem padrão
+                'preco': 100.00  # preço fixo para exemplo
+            })
+
+    session[carrinho_nome] = carrinho
+    session.modified = True
+
+    return jsonify({'mensagem': f'Kit adicionado ao carrinho com {len(itens)} peças.'})
+
 @app.route('/adicionar', methods=['POST'])
 def adicionar_carrinho():
     nome = session.get('nome')

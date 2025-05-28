@@ -11,6 +11,55 @@
          display: block;
          margin: 0 auto;
          }
+         body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: var(--cinza-fundo);
+        color: var(--azul-escuro);
+        font-size: 18px;
+      }
+         :root {
+        --azul-escuro: #1E3161;
+        --azul-claro: #369ED8;
+        --verde-claro: #4CAF50;
+        --verde-escuro: #388E3C;
+        --cinza-fundo: #f5f7fa;
+      }
+      header {
+      background: var(--azul-escuro);
+      color: white;
+      padding: 10px 20px; /* padding vertical reduzido para ficar alinhado */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky; /* fica fixo no topo ao rolar */
+      top: 0;
+      z-index: 1000;
+      width: 100%; /* força ocupar toda largura */
+      box-sizing: border-box; /* para o padding não aumentar a largura total */
+      }
+
+      .logo {
+        text-align: center;
+        flex-grow: 1;
+      }
+
+      .logo img {
+        height: 60px;
+      }
+
+      .carrinho {
+        font-size: 32px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        color: white;
+        text-decoration: none;
+      }
+
+      .carrinho:hover {
+        color: var(--azul-claro);
+      }
+
          .highlight {
          stroke: orange !important;
          stroke-width: 2 !important;
@@ -152,7 +201,18 @@
       </style>
    </head>
    <body>
-      <h2 style="text-align:center;">Clique nas áreas interativas do SVG</h2>
+      <header>
+         <div class="logo">
+           <a>
+             <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+           </a>
+         </div>
+     
+         <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">
+           <img src="https://i.ibb.co/wh510dXq/grocery-store.png" alt="Carrinho de compras" style="width: 40px; height: 40px;">
+         </a>
+       </header>
+        <h2 style="text-align:center;"></h2>
       <div id="svg-container">
          <svg fill="none" fill-rule="evenodd" height="210.000mm" stroke-linecap="round" stroke-linejoin="round" viewBox="0.000000 0.000000 297.000000 210.000000" width="297.000mm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <desc>Composer Export</desc>
@@ -1743,122 +1803,235 @@
             </g>
          </svg>
       </div>
-      <!-- Modal -->
-      <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body">
-         <div id="modal-content">
-            <button id="modal-close" aria-label="Fechar modal">&times;</button>
-            <h3 id="modal-title">Informações da Peça</h3>
-            <div id="modal-body">Carregando...</div>
-            <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-               <button id="btn-redirect" class="btn-beleza" aria-label="Ir para detalhes do chassi">
-               Ver detalhes
-               </button>
-               <form id="modalForm" method="POST" action="/adicionar">
-                  <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
-                  <button type="submit" class="btn-carrinho" aria-label="Adicionar ao carrinho">
-                  <img src="https://i.ibb.co/Z6yPpNJt/adicionar-produto.png" alt="Adicionar ao Carrinho" style="width: 24px; height: 24px; margin-right: 8px;">
-                  Adicionar ao carrinho
-                  </button>
-               </form>
-               <button id="btn-buy-now" class="btn-beleza" aria-label="Comprar agora">
-               <img src="https://i.ibb.co/Psktkv0M/checklist.png" alt="Comprar agora" style="width: 24px; height: 24px; margin-right: 8px;">
-               Comprar agora
-               </button>
-            </div>
-         </div>
-      </div>
-      <script>
-         // Suponha que essa variável tenha o valor que quer passar:
-         const valor = "exemplo123";
-         
-         // Pega o botão
-         const btnRedirect = document.getElementById("btn-redirect");
-         
-         // Adiciona o evento de clique para redirecionar com parâmetro chassi
-         btnRedirect.addEventListener("click", () => {
-           window.location.href = `html1.html?chassi=${encodeURIComponent(valor)}`;
-         });
-         
-         const produtos = {
-         "hotspot.0": {codigo: "Imagem 2D 1", quantidade: 0},
-         "hotspot.1": {codigo: "Imagem 2D 2", quantidade: 0},
-         "hotspot.2": {codigo: "CO-G1004651", quantidade: 8},
-         "hotspot.3": {codigo: "CO-G3012081", quantidade: 4},
-         "hotspot.4": {codigo: "CO-I1007321", quantidade: 4},
-         "hotspot.5": {codigo: "CO-I1007370", quantidade: 4},
-         "hotspot.6": {codigo: "CO-I1007528", quantidade: 2},
-         "hotspot.7": {codigo: "CO-I1010075", quantidade: 1},
-         "hotspot.8": {codigo: "CO-I1010091", quantidade: 2},
-         "hotspot.9": {codigo: "CO-I1019110", quantidade: 1},
-         "hotspot.10": {codigo: "CO-I1019111", quantidade: 1},
-         "hotspot.11": {codigo: "CO-I1019112", quantidade: 1},
-         "hotspot.12": {codigo: "CO-I1019113", quantidade: 1},
-         "hotspot.13": {codigo: "CO-G1004660", quantidade: 8},
-         "hotspot.14": {codigo: "CO-I1019114", quantidade: 1},
-         "hotspot.15": {codigo: "CO-I1019115", quantidade: 2},
-         "hotspot.16": {codigo: "CO-I1020903", quantidade: 1},
-         "hotspot.17": {codigo: "CO-G1005091", quantidade: 4},
-         "hotspot.18": {codigo: "CO-G1005457", quantidade: 1},
-         "hotspot.19": {codigo: "CO-G1010507", quantidade: 2},
-         "hotspot.20": {codigo: "CO-G1013121", quantidade: 1},
-         "hotspot.21": {codigo: "CO-G3001009", quantidade: 4},
-         "hotspot.22": {codigo: "CO-G3001012", quantidade: 12},
-         "hotspot.23": {codigo: "CO-G3001107", quantidade: 8}
-         };
-         
-         document.addEventListener('DOMContentLoaded', () => {
-         const svg = document.querySelector('#svg-container svg');
-         const modal = document.getElementById('modal');
-         const modalContent = document.getElementById('modal-content');
-         const modalTitle = document.getElementById('modal-title');
-         const modalBody = document.getElementById('modal-body');
-         const modalClose = document.getElementById('modal-close');
-         
-         if (!svg) return;
-         
-         // Fecha o modal
-         modalClose.addEventListener('click', () => {
-             modal.style.display = 'none';
-         });
-         
-         window.addEventListener('keydown', e => {
-             if (e.key === 'Escape' && modal.style.display === 'flex') {
-                 modal.style.display = 'none';
-             }
-         });
-         
-         modal.addEventListener('click', (event) => {
-             if (event.target === modal) {
-                 modal.style.display = 'none';
-             }
-         });
-         
-         const clickableElements = svg.querySelectorAll('[id^="hotspot."]');
-         clickableElements.forEach(el => {
-             el.style.cursor = 'pointer';
-             el.addEventListener('click', event => {
-                 event.stopPropagation();
-                 const id = el.id;
-                 const dados = produtos[id];
-         
-                 // Define o conteúdo
-                 if (dados && dados.codigo) {
-                     modalTitle.textContent = `Código da peça: ${dados.codigo}`;
-                     modalBody.innerHTML = `
-                         <p><strong>Quantidade:</strong> ${dados.quantidade}</p>
-                         <p><strong>ID interno:</strong> <code>${id}</code></p>
-                     `;
-                 } else {
-                     modalTitle.textContent = `ID: ${id}`;
-                     modalBody.innerHTML = `<p>Sem dados cadastrados para este item.</p>`;
-                 }
-         
-                 // Exibe o modal com animação
-                 modal.style.display = 'flex';
-                 modalContent.style.animation = 'scaleUpModal 0.3s ease forwards';
-             });
-         });
-         });
-      </script>
+<!-- Modal -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body"
+     style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(107, 115, 126, 0.85); z-index: 1000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+  <div id="modal-content"
+       style="background: #2C3E50; padding: 30px 30px 20px 30px; border-radius: 15px;
+              max-width: 480px; width: 90%;
+              position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+              display: flex; flex-direction: column; gap: 20px; color: #ECF0F1;
+              max-height: 90vh; overflow-y: auto;">
+
+    <!-- Imagem no topo -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <img src="https://www.grupoaiz.com.br/img/logo-grupoaiz-branco.svg" alt="Grupo AIZ"
+           style="max-width: 180px; height: auto; ">
+    </div>
+
+    <button id="modal-close" aria-label="Fechar modal"
+            style="position: absolute; top: 15px; right: 15px; background: transparent; border: none;
+                   font-size: 28px; color: #ECF0F1; cursor: pointer; transition: color 0.3s ease;
+                   line-height: 1; user-select: none;">
+      &times;
+    </button>
+
+    <h3 id="modal-title" style="margin: 0; font-weight: 700; font-size: 1.5rem; color: #F39C12;
+                                text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">
+      Informações da Peça
+    </h3>
+
+    <div id="modal-body" style="font-size: 1.25rem; line-height: 1.5; min-height: 60px; color: #D0D7DE;">
+      Carregando...
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;">
+
+      <button id="btn-buy-now" class="btn-beleza" aria-label="Comprar agora" type="button"
+              style="flex: 1 1 45%; background: #2980B9; border: none; color: #F1C40F; padding: 12px 0;
+                     border-radius: 8px; font-weight: 600; display: flex; align-items: center;
+                     justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(41, 128, 185, 0.8);
+                     transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+        <img src="https://i.ibb.co/Psktkv0M/checklist.png" alt="" style="width: 22px; height: 22px; filter: brightness(0) invert(1);" aria-hidden="true">
+        Comprar agora
+      </button>
+
+      <button id="btn-kit-completo" class="btn-beleza" aria-label="Adicionar kit completo" type="button"
+              style="flex: 1 1 45%; background: #2471A3; border: none; color: #F1C40F; padding: 12px 0;
+                     border-radius: 8px; font-weight: 600; box-shadow: 0 4px 12px rgba(36, 113, 163, 0.8);
+                     transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+        Adicionar kit completo
+      </button>
+
+      <button id="btn-redirect" class="btn-beleza" aria-label="Ir para detalhes do chassi" type="button"
+              style="flex: 1 1 45%; background: #1F618D; border: none; color: #F1C40F; padding: 12px 0;
+                     border-radius: 8px; font-weight: 600; box-shadow: 0 4px 12px rgba(31, 97, 141, 0.8);
+                     transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+        Ver detalhes
+      </button>
+
+      <form id="modalForm" method="POST" action="/adicionar_svg" style="flex: 1 1 45%; margin: 0;">
+        <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
+        <input type="hidden" id="modalQuantidade" name="quantidade" value="1">
+        <button type="submit" class="btn-carrinho"
+                style="width: 100%; background: #F1C40F; border: none; color: #2C3E50; padding: 12px 0;
+                       border-radius: 8px; font-weight: 700; box-shadow: 0 4px 12px rgba(241, 196, 15, 0.8);
+                       transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+          Adicionar ao carrinho
+        </button>
+      </form>
+
+    </div>
+
+    <div id="msg-carrinho" style="margin-top: 10px; font-weight: 600; color: #D0D7DE; min-height: 1.4em;"></div>
+
+  </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('modal');
+  const modalContent = document.getElementById('modal-content');
+  const modalTitle = document.getElementById('modal-title');
+  const modalBody = document.getElementById('modal-body');
+  const modalClose = document.getElementById('modal-close');
+  const btnRedirect = document.getElementById('btn-redirect');
+  const modalForm = document.getElementById('modalForm');
+  const inputCodigo = document.getElementById('modalCodigoProduto');
+  const inputQuantidade = document.getElementById('modalQuantidade');
+  const msgCarrinho = document.getElementById('msg-carrinho');
+  const btnKitCompleto = document.getElementById('btn-kit-completo');
+
+  const fecharModal = () => {
+    modal.style.display = 'none';
+    msgCarrinho.textContent = '';
+  };
+
+  modalClose.addEventListener('click', fecharModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) fecharModal();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') fecharModal();
+  });
+
+  const produtos = {
+    "hotspot.0": { codigo: "Imagem 2D 1", quantidade: 0 },
+    "hotspot.1": { codigo: "Imagem 2D 2", quantidade: 0 },
+    "hotspot.2": { codigo: "CO-G1004651", quantidade: 8 },
+    "hotspot.3": { codigo: "CO-G3012081", quantidade: 4 },
+    "hotspot.4": { codigo: "CO-I1007321", quantidade: 4 },
+    "hotspot.5": { codigo: "CO-I1007370", quantidade: 4 },
+    "hotspot.6": { codigo: "CO-I1007528", quantidade: 2 },
+    "hotspot.7": { codigo: "CO-I1010075", quantidade: 1 },
+    "hotspot.8": { codigo: "CO-I1010091", quantidade: 2 },
+    "hotspot.9": { codigo: "CO-I1019110", quantidade: 1 },
+    "hotspot.10": { codigo: "CO-I1019111", quantidade: 1 },
+    "hotspot.11": { codigo: "CO-I1019112", quantidade: 1 },
+    "hotspot.12": { codigo: "CO-I1019113", quantidade: 1 },
+    "hotspot.13": { codigo: "CO-G1004660", quantidade: 8 },
+    "hotspot.14": { codigo: "CO-I1019114", quantidade: 1 },
+    "hotspot.15": { codigo: "CO-I1019115", quantidade: 2 },
+    "hotspot.16": { codigo: "CO-I1020903", quantidade: 1 },
+    "hotspot.17": { codigo: "CO-G1005091", quantidade: 4 },
+    "hotspot.18": { codigo: "CO-G1005457", quantidade: 1 },
+    "hotspot.19": { codigo: "CO-G1010507", quantidade: 2 },
+    "hotspot.20": { codigo: "CO-G1013121", quantidade: 1 },
+    "hotspot.21": { codigo: "CO-G3001009", quantidade: 4 },
+    "hotspot.22": { codigo: "CO-G3001012", quantidade: 12 },
+    "hotspot.23": { codigo: "CO-G3001107", quantidade: 8 }
+  };
+
+  document.querySelectorAll('[id^="hotspot."]').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const id = el.id;
+      const dados = produtos[id];
+
+      if (dados?.codigo) {
+        modalTitle.textContent = `Código da peça: ${dados.codigo}`;
+        modalBody.innerHTML = `<p><strong>Quantidade:</strong> ${dados.quantidade}</p>`;
+        inputCodigo.value = dados.codigo;
+        inputQuantidade.value = dados.quantidade || 1;
+      } else {
+        modalTitle.textContent = `ID: ${id}`;
+        modalBody.innerHTML = `<p>Sem dados cadastrados para este item.</p>`;
+        inputCodigo.value = '';
+        inputQuantidade.value = 1;
+      }
+
+      msgCarrinho.textContent = '';
+      modal.style.display = 'flex';
+      modalContent.style.animation = 'scaleUpModal 0.3s ease forwards';
+    });
+  });
+
+  btnRedirect.addEventListener('click', () => {
+    const codigo = inputCodigo.value.trim();
+    if (codigo) {
+      window.location.href = `html1.html?chassi=${encodeURIComponent(codigo)}`;
+    }
+  });
+
+  modalForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const codigoProduto = inputCodigo.value.trim();
+    const quantidade = parseInt(inputQuantidade.value, 10);
+
+    if (!codigoProduto || isNaN(quantidade) || quantidade <= 0) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Código ou quantidade inválida.';
+      return;
+    }
+
+    try {
+      const response = await fetch('/adicionar_svg', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ CodigoProduto: codigoProduto, quantidade })
+      });
+
+      const data = await response.json();
+      msgCarrinho.style.color = response.ok ? 'green' : 'red';
+      msgCarrinho.textContent = data.mensagem || data.erro || 'Erro inesperado.';
+    } catch (error) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Erro na comunicação com o servidor.';
+      console.error(error);
+    }
+  });
+
+  // Envio do kit completo
+  btnKitCompleto.addEventListener('click', async () => {
+    const kit = Object.values(produtos)
+      .filter(p => p.quantidade > 0)
+      .map(p => ({ CodigoProduto: p.codigo, quantidade: p.quantidade }));
+
+    if (!kit.length) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Nenhuma peça com quantidade disponível.';
+      return;
+    }
+
+    try {
+      const response = await fetch('/adicionar_svg_kit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ itens: kit })
+      });
+
+      const data = await response.json();
+      msgCarrinho.style.color = response.ok ? 'green' : 'red';
+      msgCarrinho.textContent = data.mensagem || data.erro || 'Erro inesperado.';
+    } catch (error) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Erro ao adicionar kit completo.';
+      console.error(error);
+    }
+  });
+});
+</script>
    </body>
 </html>
