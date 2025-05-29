@@ -169,7 +169,6 @@ def loja():
 # ==================== CARRINHO ====================
 @app.route('/adicionar_svg', methods=['POST'])
 def adicionar_svg():
-    # Suporta JSON e form tradicional (no caso usaremos JSON)
     if request.is_json:
         data = request.get_json()
         codigo = data.get('CodigoProduto')
@@ -189,6 +188,13 @@ def adicionar_svg():
 
     carrinho = session[carrinho_nome]
 
+    # Buscar dados do produto
+    produto = produtos_disponiveis.get(codigo, {})
+    imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
+    urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
+    imagem_url = urls[0] if urls else 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'
+    preco = max(0, round(produto.get('PrecoVenda', 100.00), 2))  # preço default caso não exista
+
     for item in carrinho:
         if item['CodigoProduto'] == codigo:
             item['quantidade'] += quantidade
@@ -198,20 +204,20 @@ def adicionar_svg():
             'CodigoProduto': codigo,
             'quantidade': quantidade,
             'nome': f'Peça {codigo}',
-            'Imagem': 'https://i.ibb.co/fG9mF6qX/Captura-de-tela-2025-05-28-141648.png',
-            'preco': 100.00
+            'Imagem': imagem_url,
+            'preco': preco
         })
 
     session[carrinho_nome] = carrinho
     session.modified = True
 
     return jsonify({'mensagem': f'Produto {codigo} adicionado ao carrinho com quantidade {quantidade}.'})
+
 @app.route('/adicionar_svg_kit', methods=['POST'])
 def adicionar_svg_kit():
     data = request.get_json()
-
-    # Espera receber uma lista de itens: [{CodigoProduto: "...", quantidade: n}, ...]
     itens = data.get('itens', [])
+    nome_kit = data.get('nome_kit', 'Kit Especial')
 
     if not itens:
         return jsonify({'erro': 'Nenhum item recebido'}), 400
@@ -219,7 +225,6 @@ def adicionar_svg_kit():
     nome = session.get('nome')
     carrinho_nome = f'carrinho_{nome}' if nome else 'carrinho'
 
-    # Cria carrinho na sessão se não existir
     if carrinho_nome not in session:
         session[carrinho_nome] = []
 
@@ -228,29 +233,35 @@ def adicionar_svg_kit():
     for item in itens:
         codigo = item.get('CodigoProduto')
         quantidade = int(item.get('quantidade', 1))
-
         if not codigo:
-            continue  # Ignora itens sem código válido
+            continue
 
-        # Atualiza quantidade se já existe no carrinho
+        # Buscar dados do produto
+        produto = produtos_disponiveis.get(codigo, {})
+        imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
+        urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
+        imagem_url = urls[0] if urls else 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'
+        preco = max(0, round(produto.get('PrecoVenda', 100.00), 2))
+
         for existente in carrinho:
             if existente['CodigoProduto'] == codigo:
                 existente['quantidade'] += quantidade
                 break
         else:
-            # Adiciona novo item no carrinho
             carrinho.append({
                 'CodigoProduto': codigo,
                 'quantidade': quantidade,
-                'nome': f'Peça {codigo}',  # pode adaptar com nome real se quiser
-                'Imagem': 'https://i.ibb.co/fG9mF6qX/Captura-de-tela-2025-05-28-141648.png',  # imagem padrão
-                'preco': 100.00  # preço fixo para exemplo
+                'nome': f'Kit Peça {codigo}',
+                'Imagem': imagem_url,
+                'preco': preco,
+                'is_kit': True
             })
 
     session[carrinho_nome] = carrinho
     session.modified = True
 
-    return jsonify({'mensagem': f'Kit adicionado ao carrinho com {len(itens)} peças.'})
+    return jsonify({'mensagem': f'Kit "{nome_kit}" adicionado ao carrinho com {len(itens)} peças.'})
+
 
 @app.route('/adicionar', methods=['POST'])
 def adicionar_carrinho():
@@ -312,12 +323,17 @@ def carrinho():
     if not carrinho_produtos:
         flash("Seu carrinho está vazio!", "warning")
 
+    # Corrige URL das imagens
     for produto in carrinho_produtos:
         imagem_raw = produto.get('Imagem', 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg')
         urls = re.findall(r'https://[^\s"<>]+', imagem_raw)
         produto['Imagem'] = urls[0] if urls else 'https://www.aizparts.com.br/uploads/679a2e3e28c07.jpg'
 
-    return render_template('carrinho.html', produtos=carrinho_produtos)
+    # Separa produtos normais e kits
+    kits = [p for p in carrinho_produtos if p.get('is_kit')]
+    normais = [p for p in carrinho_produtos if not p.get('is_kit')]
+
+    return render_template('carrinho.html', kits=kits, normais=normais)
 
 @app.route('/finalizar-compra', methods=['POST'])
 def finalizar_compra():

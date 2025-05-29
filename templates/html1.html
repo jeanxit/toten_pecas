@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>SVG Interativo</title>
-   <style>
+   <head>
+      <meta charset="UTF-8" />
+      <title>SVG Interativo</title>
+      <style>
          #svg-container svg {
          max-width: 1000px;
          width: 100%;
@@ -11,6 +11,55 @@
          display: block;
          margin: 0 auto;
          }
+         body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: var(--cinza-fundo);
+        color: var(--azul-escuro);
+        font-size: 18px;
+      }
+         :root {
+        --azul-escuro: #1E3161;
+        --azul-claro: #369ED8;
+        --verde-claro: #4CAF50;
+        --verde-escuro: #388E3C;
+        --cinza-fundo: #f5f7fa;
+      }
+      header {
+      background: var(--azul-escuro);
+      color: white;
+      padding: 10px 20px; /* padding vertical reduzido para ficar alinhado */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky; /* fica fixo no topo ao rolar */
+      top: 0;
+      z-index: 1000;
+      width: 100%; /* força ocupar toda largura */
+      box-sizing: border-box; /* para o padding não aumentar a largura total */
+      }
+
+      .logo {
+        text-align: center;
+        flex-grow: 1;
+      }
+
+      .logo img {
+        height: 60px;
+      }
+
+      .carrinho {
+        font-size: 32px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        color: white;
+        text-decoration: none;
+      }
+
+      .carrinho:hover {
+        color: var(--azul-claro);
+      }
+
          .highlight {
          stroke: orange !important;
          stroke-width: 2 !important;
@@ -23,6 +72,7 @@
          z-index: 1000;
          align-items: center;
          justify-content: center;
+         /* REMOVE ESSA ANIMAÇÃO DAQUI */
          }
          @keyframes fadeInBackground {
          from { background: rgba(0,0,0,0); }
@@ -30,18 +80,20 @@
          }
          #modal-content {
          background: linear-gradient(145deg, #ffffff, #e6e9f0);
-         padding: 40px 35px 35px 35px;
+         padding: 40px 35px 35px 35px; /* mais espaçamento interno */
          border-radius: 12px;
-         max-width: 640px;
+         max-width: 640px; /* antes era 510px */
+         max-height:
          width: 95%;
          box-shadow: 0 15px 30px rgba(0,0,0,0.25);
          position: relative;
          text-align: left;
          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
          word-wrap: break-word;
-         transform: scale(1);
+         transform: scale(1); /* escala normal, sem redução */
          opacity: 0;
-         font-size: 16px;
+         font-size: 16px; /* opcional: aumente se quiser texto maior */
+         /* animação padrão já está removida */
          }
          @keyframes scaleUpModal {
          to {
@@ -49,6 +101,7 @@
          opacity: 1;
          }
          }
+         /* Botão fechar estilizado */
          #modal-close {
          position: absolute;
          top: 12px;
@@ -78,17 +131,20 @@
          outline: none;
          box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.6);
          }
+         /* Título modal */
          #modal-title {
          font-weight: 700;
          font-size: 1.6rem;
          margin-bottom: 15px;
          color: #333;
          }
+         /* Corpo do modal */
          #modal-body {
          font-size: 1.5rem;
          color: #555;
          line-height: 1.5;
          }
+         /* Código dentro do modal */
          code {
          background: #f0f0f3;
          padding: 6px 10px;
@@ -117,7 +173,7 @@
          }
          .btn-carrinho {
          padding: 10px 20px;
-         background-color: #28a745;
+         background-color: #28a745; /* verde */
          color: white;
          border: none;
          font-size: 20px;
@@ -129,7 +185,7 @@
          transition: background-color 0.3s ease;
          }
          .btn-carrinho:hover {
-         background-color: #218838;
+         background-color: #218838; /* verde escuro no hover */
          }
          .btn-beleza:hover,
          .btn-beleza:focus {
@@ -143,11 +199,19 @@
          box-shadow: 0 4px 10px rgba(42, 94, 171, 0.5);
          }
       </style>
-</head>
-<body>
-
-<h2 style="text-align:center;">Clique nas áreas interativas do SVG</h2>
-
+   </head>
+   <body>
+      <header>
+         <div class="logo">
+           <a>
+             <img src="https://www.aizparts.com.br/tpl/img/logo.png" alt="Logo do Grupo AIZ" />
+           </a>
+         </div>
+     
+         <a href="{{ url_for('carrinho') }}" class="carrinho" title="Ir para o carrinho">
+           <img src="https://i.ibb.co/wh510dXq/grocery-store.png" alt="Carrinho de compras" style="width: 40px; height: 40px;">
+         </a>
+       </header>
 <div id="svg-container">
     <svg fill="none" fill-rule="evenodd" height="210.000mm" stroke-linecap="round" stroke-linejoin="round" viewBox="0.000000 0.000000 297.000000 210.000000" width="297.000mm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <desc>Composer Export</desc>
@@ -3482,41 +3546,111 @@
 </div>
 
 <!-- Modal -->
-<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body" 
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body"
      style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-  <div id="modal-content" 
-       style="background: #fff; padding: 20px; border-radius: 8px; max-width: 600px; width: 100%; 
-              position: relative; display: flex; flex-direction: column; animation: scaleUpModal 0.3s ease forwards;">
-    <button id="modal-close" aria-label="Fechar modal" 
-            style="position: absolute; top: 10px; right: 10px; background: #f44336; color: #fff; width: 32px; height: 32px; 
-                   border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; font-size: 24px; cursor: pointer;">
+            width: 100%; height: 100%; background: rgba(107, 115, 126, 0.85); z-index: 1000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+  <div id="modal-content"
+       style="background: #2C3E50; padding: 30px 30px 20px 30px; border-radius: 15px;
+              max-width: 480px; width: 90%;
+              position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+              display: flex; flex-direction: column; gap: 20px; color: #ECF0F1;
+              max-height: 90vh; overflow-y: auto;">
+
+    <!-- Imagem no topo -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <img src="https://www.grupoaiz.com.br/img/logo-grupoaiz-branco.svg" alt="Grupo AIZ"
+           style="max-width: 180px; height: auto; ">
+    </div>
+
+    <button id="modal-close" aria-label="Fechar modal"
+            style="position: absolute; top: 15px; right: 15px; background: transparent; border: none;
+                   font-size: 28px; color: #ECF0F1; cursor: pointer; transition: color 0.3s ease;
+                   line-height: 1; user-select: none;">
       &times;
     </button>
-    <h3 id="modal-title" style="margin-top: 0;">Informações da Peça</h3>
-    <div id="modal-body" style="margin-bottom: 20px;">Carregando...</div>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
-      <button id="btn-buy-now" class="btn-beleza" aria-label="Comprar agora" type="button" 
-              style="cursor: pointer; flex: 1 1 auto; min-width: 140px; display: flex; align-items: center; justify-content: center;">
-        <img src="https://i.ibb.co/Psktkv0M/checklist.png" alt="Comprar agora" 
-             style="width: 20px; height: 20px; margin-right: 8px;">
+
+    <h3 id="modal-title" style="margin: 0; font-weight: 700; font-size: 1.5rem; color: #F39C12;
+                                text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">
+      Informações da Peça
+    </h3>
+
+    <div id="modal-body" style="font-size: 1.25rem; line-height: 1.5; min-height: 60px; color: #D0D7DE;">
+      Carregando...
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between;">
+
+      <button id="btn-buy-now" class="btn-beleza" aria-label="Comprar agora" type="button"
+              style="flex: 1 1 45%; background: #2980B9; border: none; color: #F1C40F; padding: 12px 0;
+                     border-radius: 8px; font-weight: 600; display: flex; align-items: center;
+                     justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(41, 128, 185, 0.8);
+                     transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+        <img src="https://i.ibb.co/Psktkv0M/checklist.png" alt="" style="width: 22px; height: 22px; filter: brightness(0) invert(1);" aria-hidden="true">
         Comprar agora
       </button>
-      <button id="btn-redirect" class="btn-beleza" aria-label="Ir para detalhes do chassi" type="button" 
-              style="cursor: pointer; flex: 1 1 auto; min-width: 140px;">
+
+      <button id="btn-kit-completo" class="btn-beleza" aria-label="Adicionar kit completo" type="button"
+              style="flex: 1 1 45%; background: #2471A3; border: none; color: #F1C40F; padding: 12px 0;
+                     border-radius: 8px; font-weight: 600; box-shadow: 0 4px 12px rgba(36, 113, 163, 0.8);
+                     transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+        Adicionar kit completo
+      </button>
+
+      <button id="btn-redirect" class="btn-beleza" aria-label="Ir para detalhes do chassi" type="button"
+              style="flex: 1 1 45%; background: #1F618D; border: none; color: #F1C40F; padding: 12px 0;
+                     border-radius: 8px; font-weight: 600; box-shadow: 0 4px 12px rgba(31, 97, 141, 0.8);
+                     transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
         Ver detalhes
       </button>
-      <form id="modalForm" method="POST" action="/adicionar_svg" style="margin: 0; flex: 1 1 auto; min-width: 140px;">
+
+      <form id="modalForm" method="POST" action="/adicionar_svg" style="flex: 1 1 45%; margin: 0;">
         <input type="hidden" id="modalCodigoProduto" name="CodigoProduto" value="">
         <input type="hidden" id="modalQuantidade" name="quantidade" value="1">
-        <button type="submit" class="btn-carrinho" style="cursor: pointer; width: 102%;">Adicionar ao carrinho</button>
+        <button type="submit" class="btn-carrinho"
+                style="width: 100%; background: #F1C40F; border: none; color: #2C3E50; padding: 12px 0;
+                       border-radius: 8px; font-weight: 700; box-shadow: 0 4px 12px rgba(241, 196, 15, 0.8);
+                       transition: background-color 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+          Adicionar ao carrinho
+        </button>
       </form>
+
     </div>
+
+    <div id="msg-carrinho" style="margin-top: 10px; font-weight: 600; color: #D0D7DE; min-height: 1.4em;"></div>
+
   </div>
 </div>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('modal');
+  const modalContent = document.getElementById('modal-content');
+  const modalTitle = document.getElementById('modal-title');
+  const modalBody = document.getElementById('modal-body');
+  const modalClose = document.getElementById('modal-close');
+  const btnRedirect = document.getElementById('btn-redirect');
+  const modalForm = document.getElementById('modalForm');
+  const inputCodigo = document.getElementById('modalCodigoProduto');
+  const inputQuantidade = document.getElementById('modalQuantidade');
+  const msgCarrinho = document.getElementById('msg-carrinho');
+  const btnKitCompleto = document.getElementById('btn-kit-completo');
+
+  const fecharModal = () => {
+    modal.style.display = 'none';
+    msgCarrinho.textContent = '';
+  };
+
+  modalClose.addEventListener('click', fecharModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) fecharModal();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') fecharModal();
+  });
+
   const produtos = {
     "hotspot.0": {codigo: "I1007528", quantidade: 0},
     "hotspot.1": {codigo: "I1020903", quantidade: 1},
@@ -3535,62 +3669,16 @@ document.addEventListener('DOMContentLoaded', () => {
     "hotspot.14": {codigo: "G1005091", quantidade: 4}
   };
 
-  const modal = document.getElementById('modal');
-  const modalContent = document.getElementById('modal-content');
-  const modalTitle = document.getElementById('modal-title');
-  const modalBody = document.getElementById('modal-body');
-  const modalClose = document.getElementById('modal-close');
-  const btnRedirect = document.getElementById('btn-redirect');
-  const modalForm = document.getElementById('modalForm');
-  const inputCodigo = document.getElementById('modalCodigoProduto');
-  const inputQuantidade = document.getElementById('modalQuantidade');
-
-  // Mensagem que aparecerá no modal após adicionar ao carrinho
-  const msgCarrinho = document.createElement('div');
-  msgCarrinho.style.marginTop = '10px';
-  msgCarrinho.style.fontWeight = 'bold';
-  modalForm.insertAdjacentElement('afterend', msgCarrinho);
-
-  // Fechar modal com botão
-  modalClose.addEventListener('click', () => {
-    modal.style.display = 'none';
-    msgCarrinho.textContent = '';
-  });
-
-  // Fechar modal clicando fora do conteúdo
-  modal.addEventListener('click', e => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
-      msgCarrinho.textContent = '';
-    }
-  });
-
-  // Fechar modal com ESC
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.style.display === 'flex') {
-      modal.style.display = 'none';
-      msgCarrinho.textContent = '';
-    }
-  });
-
-  // Seleciona SVG e hotspots
-  const svg = document.querySelector('#svg-container svg');
-  if (!svg) return;
-
-  const clickableElements = svg.querySelectorAll('[id^="hotspot."]');
-  clickableElements.forEach(el => {
+  document.querySelectorAll('[id^="hotspot."]').forEach(el => {
     el.style.cursor = 'pointer';
-    el.addEventListener('click', e => {
-      e.stopPropagation();
+    el.addEventListener('click', (event) => {
+      event.stopPropagation();
       const id = el.id;
       const dados = produtos[id];
 
-      if (dados && dados.codigo) {
+      if (dados?.codigo) {
         modalTitle.textContent = `Código da peça: ${dados.codigo}`;
-        modalBody.innerHTML = `
-          <p><strong>Quantidade:</strong> ${dados.quantidade}</p>
-
-        `;
+        modalBody.innerHTML = `<p><strong>Quantidade:</strong> ${dados.quantidade}</p>`;
         inputCodigo.value = dados.codigo;
         inputQuantidade.value = dados.quantidade || 1;
       } else {
@@ -3606,20 +3694,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Botão "Ver detalhes" - redireciona para página com código no query param
   btnRedirect.addEventListener('click', () => {
-    const codigo = inputCodigo.value;
+    const codigo = inputCodigo.value.trim();
     if (codigo) {
       window.location.href = `html1.html?chassi=${encodeURIComponent(codigo)}`;
     }
   });
 
-  // Formulário "Adicionar ao carrinho" com envio AJAX
   modalForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const codigoProduto = inputCodigo.value;
-    const quantidade = inputQuantidade.value;
+    const codigoProduto = inputCodigo.value.trim();
+    const quantidade = parseInt(inputQuantidade.value, 10);
+
+    if (!codigoProduto || isNaN(quantidade) || quantidade <= 0) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Código ou quantidade inválida.';
+      return;
+    }
 
     try {
       const response = await fetch('/adicionar_svg', {
@@ -3628,21 +3720,47 @@ document.addEventListener('DOMContentLoaded', () => {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({ CodigoProduto: codigoProduto, quantidade: quantidade })
+        body: JSON.stringify({ CodigoProduto: codigoProduto, quantidade })
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        msgCarrinho.style.color = 'green';
-        msgCarrinho.textContent = data.mensagem || 'Produto adicionado ao carrinho!';
-      } else {
-        const errorData = await response.json();
-        msgCarrinho.style.color = 'red';
-        msgCarrinho.textContent = errorData.erro || 'Erro ao adicionar ao carrinho.';
-      }
+      const data = await response.json();
+      msgCarrinho.style.color = response.ok ? 'green' : 'red';
+      msgCarrinho.textContent = data.mensagem || data.erro || 'Erro inesperado.';
     } catch (error) {
       msgCarrinho.style.color = 'red';
       msgCarrinho.textContent = 'Erro na comunicação com o servidor.';
+      console.error(error);
+    }
+  });
+
+  // Envio do kit completo
+  btnKitCompleto.addEventListener('click', async () => {
+    const kit = Object.values(produtos)
+      .filter(p => p.quantidade > 0)
+      .map(p => ({ CodigoProduto: p.codigo, quantidade: p.quantidade }));
+
+    if (!kit.length) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Nenhuma peça com quantidade disponível.';
+      return;
+    }
+
+    try {
+      const response = await fetch('/adicionar_svg_kit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ itens: kit })
+      });
+
+      const data = await response.json();
+      msgCarrinho.style.color = response.ok ? 'green' : 'red';
+      msgCarrinho.textContent = data.mensagem || data.erro || 'Erro inesperado.';
+    } catch (error) {
+      msgCarrinho.style.color = 'red';
+      msgCarrinho.textContent = 'Erro ao adicionar kit completo.';
       console.error(error);
     }
   });
