@@ -320,6 +320,55 @@ details > *:not(summary) {
       vertical-align: middle;
       user-select: none;
     }
+
+.modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* fundo escuro com transparência */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #ffffff; /* fundo branco sólido */
+  color: #333;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content button {
+  background-color: #28a745;           /* verde sucesso */
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.modal-content button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.modal-content button:active {
+  transform: scale(0.95);
+}
+
+
   </style>
 
 <h1>🛒 Carrinho de {{ session.get('nome', 'usuário') }}</h1>
@@ -394,7 +443,7 @@ details > *:not(summary) {
           <input type="hidden" name="produto_preco" value="{{ produto.preco }}">
           <input type="hidden" name="produto.CodigoProduto" value="{{ produto.CodigoProduto }}">
         {% endfor %}
-        <button type="submit" class="botao-finalizar">Finalizar Compra</button>
+        <button type="button" onclick="mostrarModal()" class="botao-finalizar">Finalizar Compra</button>
         <a class="voltar" href="{{ url_for('loja') }}">← Voltar para a Loja</a>
       </form>
       <div class="secure">Compra segura e protegida</div>
@@ -458,6 +507,27 @@ details > *:not(summary) {
   window.onload = function() {
     updateTotal();
   };
+
+  function mostrarModal() {
+  document.getElementById('finalizacaoModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('finalizacaoModal').style.display = 'none';
+  window.location.href = '/';
+}
+
+
 </script>
+<div id="finalizacaoModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <img src="https://i.ibb.co/tMVFF3dR/verifica-1.png" alt="Ícone de confirmação" style="width: 60px; height: 60px; margin-bottom: 15px;">
+    <h2>Solicitação enviada!</h2>
+    <p>Sua solicitação de compra foi finalizada e enviada à equipe responsável.</p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+
 </body>
 </html>
