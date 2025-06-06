@@ -182,7 +182,7 @@ label[for="file-upload"] {
 </head>
 <body>
   <div class="welcome">
-    <div class="speech-bubble">Bem-vindo, {{ session.get('nome', 'usuário') }}!</div>
+    <div class="speech-bubble">Bem-vindo, {{ session.get('nome', 'usuário').upper()}}!</div>
   </div>
 <br>
 <br>

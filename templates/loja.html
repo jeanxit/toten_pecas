@@ -448,7 +448,7 @@
 
     <div class="perfil">
       <div class="foto-perfil"></div>
-      <div class="nome-perfil"> {{ nome }}</div>
+      <div class="nome-perfil"> {{ nome.upper() }}</div>
     </div>
 
     <ul>
@@ -484,7 +484,7 @@
 
   <main class="container">
     <section class="bem-vindo">
-      <h2>Olá, {{ nome }} 👋</h2>
+      <h2>Olá, {{ nome.upper() }} 👋</h2>
       <p>Confira os itens disponíveis e monte seu pedido:</p>
     </section>
 
