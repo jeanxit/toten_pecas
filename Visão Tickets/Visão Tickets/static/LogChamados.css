@@ -1,0 +1,195 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f2f4f8;
+  color: #333;
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background-color: #1C294C;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 3px 0 10px rgb(28 41 76 / 0.5);
+}
+
+.profile {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  background-color: #369ED8;  /* cor do fundo */
+  color: white;               /* cor da letra */
+  font-size: 48px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 8px #369ED8;
+  border: 3px solid #369ED8;
+  user-select: none;
+}
+
+.sidebar h2 {
+  font-size: 22px;
+  margin-bottom: 5px;
+  font-weight: 700;
+  color: #369ED8;
+}
+
+.sidebar p {
+  font-size: 14px;
+  color: #a0b0d4;
+  font-weight: 500;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav ul li {
+  padding: 15px 0;
+  cursor: pointer;
+  font-size: 18px;
+  color: #a0b0d4;
+  border-bottom: 1px solid #2e3a68;
+  transition: color 0.3s;
+}
+
+.sidebar nav ul li:hover {
+  color: #369ED8;
+  font-weight: 600;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 50px 60px;
+  overflow-y: auto;
+  background: #f9fbff;
+}
+
+header h1 {
+  margin-bottom: 35px;
+  font-size: 32px;
+  color: #1C294C;
+  font-weight: 700;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: white;
+  padding: 28px 35px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgb(54 158 216 / 0.3);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgb(54 158 216 / 0.45);
+  border-color: #369ED8;
+}
+
+.card h3 {
+  margin-bottom: 14px;
+  color: #1C294C;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.card p {
+  font-size: 30px;
+  font-weight: 900;
+  color: #369ED8;
+  letter-spacing: 1px;
+}
+
+/* Gráfico de chamados */
+.grafico {
+  background: white;
+  padding: 25px 30px;  /* menos padding para compactar */
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgb(54 158 216 / 0.3);
+  margin-bottom: 30px; /* menor margem */
+}
+
+.grafico h2 {
+  margin-bottom: 20px; /* menos espaço abaixo do título */
+  font-size: 24px;     /* título um pouco menor */
+  color: #1C294C;
+  font-weight: 700;
+  text-align: center;
+}
+
+canvas#graficoChamados {
+  max-width: 100%;
+  height: 240px; /* altura reduzida */
+}
+
+
+/* Lista de chamados */
+.lista-chamados {
+  background: white;
+  padding: 30px 35px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgb(54 158 216 / 0.3);
+  margin-top: 20px;
+}
+
+.lista-chamados h2 {
+  font-size: 24px;
+  margin-bottom: 22px;
+  color: #1C294C;
+  font-weight: 700;
+}
+
+.lista-chamados ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  border-top: 2px solid #369ED8;
+  border-radius: 6px;
+}
+
+.lista-chamados li {
+  padding: 14px 22px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+  font-size: 17px;
+  transition: background-color 0.2s;
+}
+
+.lista-chamados li:hover {
+  background-color: #eaf3fc;
+  cursor: default;
+}

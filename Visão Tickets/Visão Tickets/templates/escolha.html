@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard de Chamados</title>
+  <link rel="stylesheet" href="/static/LogChamados.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Menu Lateral -->
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="avatar"></div>
+        <h2>Jean</h2>
+        <p>usuario@empresa.com</p>
+      </div>
+      <nav>
+        <ul>
+          <li>📝 Abrir Novo Chamado</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      <header>
+        <h1>Dashboard de Chamados</h1>
+      </header>
+   <!-- Gráfico de Chamados -->
+      <section class="grafico">
+        <h2>Status dos Chamados</h2>
+        <div class="grafico-wrapper">
+          <canvas id="graficoChamados"></canvas>
+        </div>
+      </section>
+      <section class="cards">
+        <div class="card">
+          <h3>Chamados Abertos</h3>
+          <p>14</p>
+        </div>
+        <div class="card">
+          <h3>Em Andamento</h3>
+          <p>5</p>
+        </div>
+        <div class="card">
+          <h3>Finalizados</h3>
+          <p>42</p>
+        </div>
+      </section>
+
+
+      <!-- Lista de Chamados Filtrados -->
+      <section class="lista-chamados" id="listaChamados">
+        <h2 id="tituloLista">Lista de Chamados</h2>
+        <ul id="chamadosContainer"></ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+  const ctx = document.getElementById('graficoChamados').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Abertos', 'Em Andamento', 'Finalizados'],
+    datasets: [{
+      label: 'Quantidade de Chamados',
+      data: [14, 5, 42],
+      backgroundColor: ['#369ED8', '#1C294C', '#2ecc71'],
+      borderRadius: 10,
+      barThickness: 40, // barras mais finas
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: '#1f2d3d',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        borderColor: '#fff',
+        borderWidth: 1
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 5
+        },
+        grid: {
+          color: '#e5e5e5'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
+  }
+});
+    const chamados = {
+      abertos: [
+        'Erro ao acessar o sistema',
+        'Solicitação de criação de usuário',
+        'Problema com impressão',
+      ],
+      andamento: [
+        'Chamado #1023 em análise pelo suporte',
+        'Verificação de acesso ao servidor',
+      ],
+      finalizados: [
+        'Reset de senha realizado com sucesso',
+        'Configuração de e-mail concluída',
+        'Treinamento agendado finalizado',
+      ]
+    };
+
+    const cards = document.querySelectorAll('.card');
+    const chamadosContainer = document.getElementById('chamadosContainer');
+    const tituloLista = document.getElementById('tituloLista');
+
+    cards.forEach((card, index) => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => {
+        let tipo;
+        if (index === 0) tipo = 'abertos';
+        else if (index === 1) tipo = 'andamento';
+        else tipo = 'finalizados';
+
+        tituloLista.innerText = `Chamados ${card.querySelector('h3').innerText}`;
+        chamadosContainer.innerHTML = '';
+
+        chamados[tipo].forEach(chamado => {
+          const li = document.createElement('li');
+          li.textContent = chamado;
+          chamadosContainer.appendChild(li);
+        });
+
+        // Scroll para a lista suavemente
+        document.getElementById('listaChamados').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+       const profile = document.querySelector('.profile');
+        const nomeUsuario = profile.querySelector('h2').textContent.trim();
+        const avatar = profile.querySelector('.avatar');
+        avatar.textContent = nomeUsuario.charAt(0).toUpperCase();
+  </script>
+</body>
+</html>

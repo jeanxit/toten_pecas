@@ -1,0 +1,226 @@
+/* Reset básico e estilo global */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 15px 10px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  color: #005f99;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* Formulário */
+form {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+  transition: box-shadow 0.3s ease;
+}
+
+form:hover,
+form:focus-within {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #005f99;
+  font-size: 0.95rem;
+}
+
+/* Inputs, selects, textarea e file */
+input[type="text"],
+select,
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  font-size: 1rem;
+  border: 1.8px solid #ccc;
+  border-radius: 5px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: none;
+  cursor: text;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus,
+input[type="file"]:focus {
+  border-color: #007acc;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 122, 204, 0.5);
+}
+
+textarea {
+  min-height: 100px;
+}
+
+/* Botão submit */
+input[type="submit"] {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 1.5rem;
+  background: #007acc;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 122, 204, 0.5);
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:focus {
+  background: #005f99;
+  box-shadow: 0 6px 14px rgba(0, 95, 153, 0.7);
+  outline: none;
+}
+
+/* Link */
+a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #007acc;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+a:hover,
+a:focus {
+  color: #005f99;
+  outline: none;
+  text-decoration: underline;
+}
+
+/* Lista de mensagens */
+ul {
+  max-width: 600px;
+  margin: 1rem auto 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+ul li {
+  background: #e0f0ff;
+  font-weight: 600;
+  margin-bottom: 7px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+ul li[style*="red"] {
+  background: #ffe0e0;
+  color: #cc0000;
+}
+
+/* Responsividade simples */
+@media (max-width: 620px) {
+  form,
+  ul {
+    max-width: 100%;
+    padding: 15px;
+  }
+}
+
+/* ===================
+   Estilo específico do Tagify no campo Observadores
+=================== */
+#observadores {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px !important;
+  font-size: 1.1rem;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-sizing: border-box;
+  cursor: text;
+}
+
+#observadores:focus {
+  border-color: #007acc !important;
+  box-shadow: 0 0 5px rgba(0, 122, 204, 0.5) !important;
+  outline: none;
+}
+
+.tagify {
+  width: 100% !important;
+  min-height: 48px;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+}
+
+
+/* Botão remover tag */
+.tagify__tag__removeBtn {
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.tagify__tag__removeBtn:hover {
+  color: white;
+}
+
+/* Dropdown das sugestões */
+.tagify__dropdown {
+  border: 1.8px solid #007acc !important;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.25);
+  border-radius: 5px !important;
+  font-size: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  z-index: 9999;
+}
+
+/* Item da lista de sugestões */
+.tagify__dropdown__item {
+  padding: 6px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tagify__dropdown__item--active,
+.tagify__dropdown__item:hover {
+  background-color: #007acc;
+  color: white;
+}
+
+/* Placeholder/input area */
+.tagify__input {
+  min-height: 30px;
+  font-size: 1rem;
+}

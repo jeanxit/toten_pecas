@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Criar Chamado</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='criar_chamado.css') }}">
+
+  <!-- Tagify CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" />
+</head>
+<body>
+  <h1>Criar Novo Chamado</h1>
+
+  <form method="post" action="{{ url_for('criar_chamado') }}" enctype="multipart/form-data" novalidate>
+   <label for="tipo">Tipo:</label>
+<select id="tipo" name="tipo" required>
+  <option value="" disabled {% if not request.form.get('tipo') %}selected{% endif %}>-----</option>
+  {% for tipo in tipos %}
+    <option value="{{ tipo }}" {% if request.form.get('tipo') == tipo %}selected{% endif %}>{{ tipo }}</option>
+  {% endfor %}
+</select>
+
+ <label for="categoria">Categoria:</label>
+<select id="categoria" name="categoria">
+  <option value="" disabled {% if not request.form.get('categoria') %}selected{% endif %}>-----</option>
+  {% for cat in categorias %}
+    <option value="{{ cat.id }}" {% if request.form.get('categoria') == cat.id %}selected{% endif %}>{{ cat.nome }}</option>
+  {% endfor %}
+</select>
+
+   <label for="urgencia">Urgência:</label>
+<select id="urgencia" name="urgencia">
+  {% for urg in urgencias %}
+    <option value="{{ urg }}" {% if request.form.get('urgencia', 'Média') == urg %}selected{% endif %}>{{ urg }}</option>
+  {% endfor %}
+</select>
+
+
+    <label for="observadores">Observadores:</label>
+    <input 
+      name="observadores" 
+      id="observadores" 
+      placeholder="Digite para buscar e selecionar observadores..." 
+      autocomplete="off"
+    />
+
+    <label for="nome">Título do Chamado:</label>
+    <input type="text" id="nome" name="nome" required value="{{ request.form.get('nome', '') }}">
+
+    <label for="descricao">Descrição:</label>
+    <textarea id="descricao" name="descricao" rows="6" required>{{ request.form.get('descricao', '') }}</textarea>
+
+    <label for="arquivo">Arquivo(s) (40 MB máx):</label>
+    <input type="file" id="arquivo" name="arquivo" multiple>
+
+<label for="setor_solicitante">Setor Solicitante</label>
+<select id="setor_solicitante" name="setor_solicitante" required>
+  <option value="" disabled {% if not request.form.get('setor_solicitante') %}selected{% endif %}>Selecione um setor</option>
+  {% for setor in setores %}
+    <option value="{{ setor.id }}" {% if request.form.get('setor_solicitante') == setor.id|string %}selected{% endif %}>{{ setor.nome }}</option>
+  {% endfor %}
+</select>
+
+
+
+
+    <input type="submit" value="Criar Chamado" />
+  </form>
+
+  <p><a href="{{ url_for('escolha') }}">Voltar</a></p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li style="color: {% if category == 'error' %}red{% else %}green{% endif %};">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Tagify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+  <script>
+    const inputObservadores = document.querySelector('input[name=observadores]');
+    const tagify = new Tagify(inputObservadores, {
+      whitelist: {{ observadores_lista|tojson }},
+      enforceWhitelist: true,
+      dropdown: {
+        maxItems: 20,
+        enabled: 0,
+        closeOnSelect: false
+      }
+    });
+
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function () {
+      inputObservadores.value = JSON.stringify(tagify.value);
+    });
+  </script>
+</body>
+</html>

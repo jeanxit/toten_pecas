@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tickets por Status</title>
+    <link rel="stylesheet" href="/static/tickets.css">
+</head>
+<body>
+    <h1>Consulta de Chamados 
+        {% if chamados['Aberto'] %}
+            [{{ chamados['Aberto'][0]['nome'] }}]
+        {% elif chamados['Em Andamento'] %}
+            [{{ chamados['Em Andamento'][0]['nome'] }}]
+        {% elif chamados['Finalizado'] %}
+            [{{ chamados['Finalizado'][0]['nome'] }}]
+        {% endif %}
+    </h1>
+
+    <div class="status-columns" id="status-columns">
+        {% for status, tickets in chamados.items() %}
+            <div class="status-section" data-status="{{ status }}">
+                <div class="status-header">
+                    <h2>{{ status }}</h2>
+                    <div class="counter">{{ tickets|length }}</div>
+                </div>
+                <div class="ticket-container">
+                    {% for ticket in tickets %}
+                        <div class="ticket"
+                             data-ticket-name="{{ ticket.nome }}"
+                             data-ticket-subject="{{ ticket.assunto if ticket.assunto is defined else '' }}"
+                             data-ticket-description="{{ ticket.descricao if ticket.descricao is defined else '' }}"
+                             data-ticket-date="{{ ticket.horacriacao if ticket.horacriacao is defined else '' }}"
+                             data-ticket-seq="{{ ticket.seq if ticket.seq is defined else '' }}"
+                             data-ticket-comentario='{{ ticket.comentarios | tojson | safe if ticket.comentarios is defined else "[]" }}'>
+
+                            {% if tipo != 'email' %}
+                                <p><strong>Nome:</strong> {{ ticket.nome }}</p>
+                            {% endif %}
+                            <p><strong>Assunto:</strong> {{ ticket.assunto if ticket.assunto is defined else "Sem assunto" }}</p>
+                            <p><strong>Descrição:</strong> {{ ticket.descricao if ticket.descricao is defined else "Sem descrição" }}</p>
+                            
+                            <p style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong>{{ ticket.seq if ticket.seq is defined else '' }}</strong>
+                                {% if status == 'Em Andamento' %}
+                                    <span style="flex: 1; text-align: center; margin-left: 50px; color: goldenrod;">{{ ticket.status }}</span>
+                                {% endif %}
+                                {{ ticket.horacriacao if ticket.horacriacao is defined else '' }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal Comentários -->
+    <div id="comentarioModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Comentários do Chamado <span id="ticket-seq"></span></h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="chat-history" id="modal-comentario"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="chat-input">
+                    <button class="emoji-btn" id="emoji-btn">
+                        <img src="https://i.ibb.co/Xx62QpNm/feliz.png" style="width: 30px;">
+                    </button>
+                    <textarea id="comentario-input" rows="3" style="width: 100%; resize: vertical;"></textarea>
+                    <button id="enviar-comentario">
+                        <img src="https://i.ibb.co/MxFhwT5d/message-1.png" style="width: 45px;">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emoji Picker -->
+    <div class="emoji-picker" id="emoji-picker" style="display: none;">
+        <div class="emoji-tabs">
+            <button onclick="showEmojiSection('faces')"><img src="https://i.ibb.co/Q7yk12Jb/laughing-694468.png" style="width: 23px;"></button>
+            <button onclick="showEmojiSection('animais')"><img src="https://i.ibb.co/SwGb3Lf6/animal-16611240.png" style="width: 23px;"></button>
+            <button onclick="showEmojiSection('comida')"><img src="https://i.ibb.co/SXtpwwQZ/pizza-14376565.png" style="width: 23px;"></button>
+            <button onclick="showEmojiSection('objetos')"><img src="https://i.ibb.co/TZVtC2C/smartphone-799112.png" style="width: 23px;"></button>
+            <button onclick="showEmojiSection('coracoes')"><img src="https://i.ibb.co/0RktM6Vm/happy-5910637.png" style="width: 23px;"></button>
+            <button onclick="showEmojiSection('natureza')"><img src="https://i.ibb.co/G4ycDqt8/peace-14538727.png" style="width: 23px;"></button>
+        </div>
+        <div class="emoji-section faces active">😊 😂 😍 🤔 😎 😢</div>
+        <!-- Outras seções podem ser adicionadas -->
+    </div>
+
+    <!-- Dados ocultos -->
+    <span id="nome-usuario" style="display: none;">
+        {% if chamados['Aberto'] %}
+            {{ chamados['Aberto'][0]['nome'] }}
+        {% elif chamados['Em Andamento'] %}
+            {{ chamados['Em Andamento'][0]['nome'] }}
+        {% elif chamados['Finalizado'] %}
+            {{ chamados['Finalizado'][0]['nome'] }}
+        {% endif %}
+    </span>
+    <span id="executor" style="display: none;">
+        {% if chamados['Aberto'] %}
+            {{ chamados['Aberto'][0]['executor'] if 'executor' in chamados['Aberto'][0] else 'Suporte' }}
+        {% elif chamados['Em Andamento'] %}
+            {{ chamados['Em Andamento'][0]['executor'] if 'executor' in chamados['Em Andamento'][0] else 'Suporte' }}
+        {% elif chamados['Finalizado'] %}
+            {{ chamados['Finalizado'][0]['executor'] if 'executor' in chamados['Finalizado'][0] else 'Suporte' }}
+        {% else %}
+            Suporte
+        {% endif %}
+    </span>
+
+    <footer>
+        <div style="position: fixed; bottom: 10px; right: 10px; font-size: 12px; font-weight: bold; background-color: rgba(255, 255, 255, 0.7); padding: 5px 10px; border-radius: 8px; color: #333;">
+            <p>&copy; Erick & Jean</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const modal = document.getElementById('comentarioModal');
+        const modalClose = modal.querySelector('.close');
+        const modalComentario = document.getElementById('modal-comentario');
+        const ticketSeqSpan = document.getElementById('ticket-seq');
+        const comentarioInput = document.getElementById('comentario-input');
+        const enviarComentarioBtn = document.getElementById('enviar-comentario');
+        const emojiBtn = document.getElementById('emoji-btn');
+        const emojiPicker = document.getElementById('emoji-picker');
+        const statusColumns = document.getElementById('status-columns');
+
+        let comentariosAtuais = [];
+        let ticketAtualSeq = null;
+
+        function abrirModalComentarios(ticketDiv) {
+            ticketSeqSpan.textContent = ticketDiv.dataset.ticketSeq || 'N/A';
+            ticketAtualSeq = ticketDiv.dataset.ticketSeq || null;
+            modalComentario.innerHTML = '';
+
+            comentariosAtuais = JSON.parse(ticketDiv.dataset.ticketComentario || '[]');
+
+            if (comentariosAtuais.length === 0) {
+                modalComentario.innerHTML = '<p>Nenhum comentário ainda.</p>';
+            } else {
+                comentariosAtuais.forEach(c => {
+                    const p = document.createElement('p');
+                    p.textContent = `[${c.data || '??'}] ${c.autor || 'Usuário'}: ${c.texto || ''}`;
+                    modalComentario.appendChild(p);
+                });
+            }
+
+            comentarioInput.value = '';
+            modal.style.display = 'block';
+        }
+
+        modalClose.onclick = () => {
+            modal.style.display = 'none';
+            emojiPicker.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                emojiPicker.style.display = 'none';
+            }
+        };
+
+        statusColumns.addEventListener('click', (e) => {
+            let target = e.target;
+            while (target && !target.classList.contains('ticket')) {
+                target = target.parentElement;
+            }
+            if (target) abrirModalComentarios(target);
+        });
+
+        enviarComentarioBtn.onclick = () => {
+            const texto = comentarioInput.value.trim();
+            if (!texto) return alert('Digite um comentário antes de enviar.');
+
+            const novoComentario = {
+                autor: document.getElementById('nome-usuario').textContent.trim() || 'Você',
+                texto: texto,
+                data: new Date().toLocaleString()
+            };
+            comentariosAtuais.push(novoComentario);
+
+            const p = document.createElement('p');
+            p.textContent = `[${novoComentario.data}] ${novoComentario.autor}: ${novoComentario.texto}`;
+            modalComentario.appendChild(p);
+
+            comentarioInput.value = '';
+            // Aqui pode ser adicionado o envio para o backend via fetch/AJAX.
+        };
+
+        emojiBtn.onclick = () => {
+            emojiPicker.style.display = (emojiPicker.style.display === 'block') ? 'none' : 'block';
+        };
+
+        function showEmojiSection(section) {
+            document.querySelectorAll('.emoji-section').forEach(el => el.classList.remove('active'));
+            const sec = document.querySelector(`.emoji-section.${section}`);
+            if (sec) sec.classList.add('active');
+        }
+
+        document.querySelectorAll('.emoji-section').forEach(section => {
+            section.addEventListener('click', e => {
+                if (e.target.tagName === 'DIV') return;
+                const emoji = e.target.textContent.trim();
+                if (emoji) {
+                    comentarioInput.value += emoji;
+                    comentarioInput.focus();
+                }
+            });
+        });
+
+        window.showEmojiSection = showEmojiSection;
+    </script>
+</body>
+</html>
