@@ -89,10 +89,10 @@ async function cadastrarUsuarioAuth({
 
 // Exemplo de uso
 cadastrarUsuarioAuth({
-  login: 'jean java',
-  email: 'jeanjava@app.com',
+  login: 'jean05',
+  email: 'jean05@app.com',
   senha: 'SenhaForte123!',
-  nome: 'Maria Silva',
+  nome: 'Jean teste',
   telefone: '11988887777',
   tipo_acesso_id: 3,
   perfil_usuario_id: 3,
